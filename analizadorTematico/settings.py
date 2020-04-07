@@ -72,13 +72,22 @@ WSGI_APPLICATION = 'analizadorTematico.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'analizadorTematico/../db.sqlite3'),
+#     }
+#
+# # Application definition
+#
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'analizadorTematico/../db.sqlite3'),
+        'ENGINE': 'djongo',
+        'NAME': 'analizadorTematicoDB',
     }
 
-# Application definition
+# Conexion con mongoDB
 
 }
 
