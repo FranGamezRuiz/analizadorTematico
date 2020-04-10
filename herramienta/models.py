@@ -26,6 +26,9 @@ class Tema(models.Model):
         verbose_name_plural = "Temas"
         ordering = ['nombre']
 
+    def getCategorias(self):
+        return self.categorias
+
     def __str__(self):
         return self.nombre
 

@@ -14,11 +14,15 @@
             {% endcomment %}
             {% for tema in tema_list %}
 
-                <a href="{% url 'tema-detalle-view' tema.nombre %}" class="list-group-item list-group-item-action"> {{ tema }} </a>
+                <a href="{% url 'tema-detalle-view' tema.pk %}" class="list-group-item list-group-item-action"> {{ tema }} </a>
 
             {% endfor %}
 
     </div>
+    <h6>
+                Crear nuevo tema
+                 <a href="{% url 'tema-create-view' %}" class="list-group-item list-group-item-action"> Crear </a>
+    </h6>
 
 {% endblock %}
 

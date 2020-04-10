@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'crispy_forms',
     'herramienta',
 ]
 
@@ -137,6 +138,6 @@ STATICFILES_DIRS = (
     'static',
 )
 
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = reverse_lazy('inicio-view')
 
