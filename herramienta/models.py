@@ -6,7 +6,7 @@ from djongo import models #importo los modelos de django
 
 class Categoria(models.Model):
     nombre = models.CharField('Nombre', max_length=50)
-    palabras_clave = models.ArrayField(model_container=models.CharField(max_length=50))
+    palabras_clave = models.CharField('Palabras clave', max_length=100)
 
     class Meta:
         verbose_name = "Categoria"
@@ -18,7 +18,7 @@ class Categoria(models.Model):
 
 class Tema(models.Model):
     nombre = models.CharField('Nombre', max_length=50)
-    palabras_clave = models.ArrayField(model_container=models.CharField(max_length=50),)
+    palabras_clave = models.CharField('Palabras clave', max_length=100)
     categorias = models.ArrayField(model_container=Categoria,)
 
     class Meta:

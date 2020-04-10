@@ -1,0 +1,52 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+        <div class="container">
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td width="400" height="250">
+                            <h4>Alumno</h4>
+                            <p class="text-justify">Francisco Jesús Gámez Ruiz</p>
+                            <h4>Tutor</h4>
+                            <p class="text-justify">Eduardo Guzmán de los Riscos</p>
+                            <h5>Contacto del alumno</h5>
+                            <h6>Email:</h6>
+                            <p class="text-justify">gamezruizf@uma.es</p>
+                            <h6>GitHub:</h6>
+                            <p class="text-justify">FranGamezRuiz</p>
+                        </td>
+                        <td width="400" height="250">
+                            <h4>¿Quién ha desarrollado la herramienta?</h4>
+                            <p class="text-justify">Esta es una herramienta desarrollada en el Trabajo
+                                de Fin de Grado del alumno Francisco Jesús Gámez Ruiz perteneciente al
+                                grado Ingeniería Informática de especialidad de Sistemas de la Información
+                                de la Universidad de Málaga.</p>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="{% static 'images/etsii.png' %} " width="500" height="500" class="img-fluid" >
+                        </td>
+                        <td>
+                            <img src="{% static 'images/logoUma.PNG' %} " width="500" height="500" class="img-fluid" >
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+{% endblock %}
+

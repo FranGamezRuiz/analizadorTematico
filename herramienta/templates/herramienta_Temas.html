@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <h4>
+        Temas
+    </h4>
+    <div class="list-group">
+
+            {% comment %}
+                Esta es una lista de los temas que hay en la base de datos
+            {% endcomment %}
+            {% for tema in tema_list %}
+
+                <a href="{% url 'tema-detalle-view' tema.nombre %}" class="list-group-item list-group-item-action"> {{ tema }} </a>
+
+            {% endfor %}
+
+    </div>
+
+{% endblock %}
+

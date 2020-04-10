@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+    <h4>
+        TEMA: {{ tema_nombre }}
+    </h4>
+    <h5>
+        Categorias
+    </h5>
+    <div class="list-group">
+
+            {% comment %}
+                Esta es una lista de los temas que hay en la base de datos
+            {% endcomment %}
+            {% for categoria in tema_categorias %}
+
+                <a class="list-group-item list-group-item-action"> {{ categoria }} </a>
+
+            {% endfor %}
+
+    </div>
+
+{% endblock %}
+

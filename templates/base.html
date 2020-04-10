@@ -9,48 +9,30 @@
     <link href="{% static 'css/started-template.css' %}" rel="stylesheet"/>
 
     {# Cargamos la librería #}
-   {% load bootstrap4 %}
+    {% load bootstrap4 %}
 
-   {# CSS Bootstrap #}
-   {% bootstrap_css %}
+    {# CSS Bootstrap #}
+    {% bootstrap_css %}
 
 
-  </head>
+</head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="#">Análisis temático</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<!--Incluir la clase navBar que contiene el navBar de la herramienta-->
+{% if request.user.is_authenticated %}
+    {% include 'navBar.html' %}
+{% endif %}
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Analizador</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sobre mí</a>
-          </li>
+{# Parte que cambia de las paginas #}
+<div class="container">
 
-        </ul>
-      </div>
-    </nav>
-
-
-    {# Parte que cambia de las paginas #}
-    <div class="container">
-
-      <div class="starter-template">
+    <div class="starter-template">
         {% block content %}{% endblock %}
-      </div>
+    </div>
 
-    </div><!-- /.container -->
+</div><!-- /.container -->
 
-    {# JS y jQuery Bootstrap #}
-   {% bootstrap_javascript jquery='full' %}
+{# JS y jQuery Bootstrap #}
+{% bootstrap_javascript jquery='full' %}
 
 </body>
 </html>

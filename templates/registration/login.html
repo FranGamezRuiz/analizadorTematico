@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <form class="form-signin" method="post" action="{% url 'login' %}">
+        <h1 class="h3 mb-3 font-weight-normal">Inicie sesión</h1>
+        {% csrf_token %} <!--Para medida seguridad-->
+        {{ form }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+        <p class="mt-5 mb-3 text-muted">TFG Francisco Jesus Gamez Ruiz</p>
+    </form>
+
+{% endblock %}
