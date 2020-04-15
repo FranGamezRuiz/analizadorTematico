@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from herramienta.forms import TemaForm
-from herramienta.models import Tema, Categoria
+from herramienta.forms import TemaForm, ConfiForm
+from herramienta.models import Tema
 
 
 # FUNCIONES para las vistas
@@ -40,16 +40,87 @@ def categoriaDetail_View(request, pk, nombre):
     for categoria in categorias:
         if categoria.nombre == nombre:
             nombreCate = categoria.nombre
-            palabrasCate = categoria.palabras_clave
 
 
     context = {
         'tema':nombreTema,
-        'categoria':nombre,
-        'palabras':palabrasCate
+        'categoriaN':nombreCate,
+        'tema.pk':pk,
+        'categorias':categorias
     }
 
     return render(request, 'herramienta/categoria_detail.html', context)
+
+@login_required
+def confiBusqueda_View(request, pk, nombre, tipo):
+
+    variable = Tema.objects.all()  # Obtengo Todos los temas
+    tema = variable.filter(pk=pk)  # tengo el tema
+    nombreTema = tema.first()
+    categorias = tema.first().getCategorias()  # tengo las categorias
+    for categoria in categorias:
+        if categoria.nombre == nombre:
+            nombreCate = categoria.nombre
+    tipo = int(tipo)
+    if tipo == 1:
+        tipoN = 'historico'
+    else:
+        tipoN = 'actual'
+
+    if request.method == 'POST':
+        formulario = ConfiForm(request.POST)
+        if formulario.is_valid():
+            numeroTweets = formulario.cleaned_data['numeroTweets']
+            fechaFin = formulario.cleaned_data['fechaFin']
+            maquinaAnalisis = formulario.cleaned_data['maquinaAnalisis']
+
+            return redirect('save-busqueda-view', pk=pk, nombre=nombre, tipo=tipo, numTw=numeroTweets, fechaFin=fechaFin,maquina=maquinaAnalisis)
+
+    else:
+        formulario = ConfiForm()
+    
+
+    context = {
+        'tema':nombreTema,
+        'categoria':nombreCate,
+        'tema.pk':pk,
+        'tipo':tipoN,
+        'formulario':formulario
+    }
+
+    return render(request, 'herramienta/confi_busqueda.html', context)
+
+@login_required()
+def saveBusqueda_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
+    variable = Tema.objects.all()  # Obtengo Todos los temas
+    tema = variable.filter(pk=pk)  # tengo el tema
+    nombreTema = tema.first()
+    palabrasClaveT = tema.first().palabras_clave
+    categorias = tema.first().getCategorias()  # tengo las categorias
+    for categoria in categorias:
+        if categoria.nombre == nombre:
+            nombreCate = categoria.nombre
+            palabrasClaveC = categoria.palabras_clave
+    tipo = int(tipo)
+    if tipo == 1:
+        tipoN = 'historico'
+    else:
+        tipoN = 'actual'
+
+
+    context = {
+        'tema': nombreTema,
+        'palabrasClaveTema':palabrasClaveT,
+        'categoria': nombreCate,
+        'palabrasClaveCate':palabrasClaveC,
+        'tipo': tipoN,
+        'numTw':numTw,
+        'fecha':fechaFin,
+        'maquinaA':maquina
+
+    }
+
+    return render(request, 'herramienta/save_busqueda.html', context)
 
 
 #########################

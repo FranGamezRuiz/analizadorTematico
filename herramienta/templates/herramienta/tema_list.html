@@ -1,28 +1,45 @@
-
 {% extends 'base.html' %}
 
 
 {% block content %}
+    <div class="container">
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td width="400" height="250">
+                    <h4>
+                        Temas
+                    </h4>
+                    <div class="list-group">
 
-    <h4>
-        Temas
-    </h4>
-    <div class="list-group">
+                        {% comment %}
+                            Esta es una lista de los temas que hay en la base de datos
+                        {% endcomment %}
+                        {% for tema in tema_list %}
 
-            {% comment %}
-                Esta es una lista de los temas que hay en la base de datos
-            {% endcomment %}
-            {% for tema in tema_list %}
+                            <a href="{% url 'tema-detalle-view' tema.pk %}"
+                               class="list-group-item list-group-item-action"> {{ tema }} </a>
 
-                <a href="{% url 'tema-detalle-view' tema.pk %}" class="list-group-item list-group-item-action"> {{ tema }} </a>
+                        {% endfor %}
 
-            {% endfor %}
-
+                    </div>
+                </td>
+                <td width="400" height="250">
+                    <h5>¿Qué es un Tema?</h5>
+                    <p class="text-justify">Un tema permite al usuario diferenciar y caracterizar la búsqueda que requiere para la
+                        recolección de tweets para analizar
+                        los sentimientos de los usuarios de Twitter.</p>
+                    <h6>
+                        Crear nuevo tema
+                        <a href="{% url 'tema-create-view' %}" class="list-group-item list-group-item-action">
+                            Crear </a>
+                    </h6>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <h6>
-                Crear nuevo tema
-                 <a href="{% url 'tema-create-view' %}" class="list-group-item list-group-item-action"> Crear </a>
-    </h6>
+
 
 {% endblock %}
 

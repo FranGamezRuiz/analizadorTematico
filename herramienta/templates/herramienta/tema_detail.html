@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 
@@ -8,29 +7,57 @@
     <h4>
         TEMA: {{ tema }}
     </h4>
-    <h5>
-        Categorias
-    </h5>
-    <div class="list-group">
-
-            {% comment %}
-                Esta es una lista de los temas que hay en la base de datos
-            {% endcomment %}
-            {% for categoria in tema.categorias %}
-
-                <a  href="{% url 'categoria-detalle-view' tema.pk categoria.nombre %}" class="list-group-item list-group-item-action"> {{ categoria }} </a>
-
-            {% endfor %}
-
-    </div>
-
     <div class="container">
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td width="400" height="250">
+                    <h5>
+                        Categorias
+                    </h5>
+                    <div class="list-group">
 
-       <h6>
-             <a href="{% url 'tema-edit-view' tema.pk %}" class="list-group-item list-group-item-action"> Editar {{ tema }}</a>
-       </h6>
+                        {% comment %}
+                        Esta es una lista de los temas que hay en la base de datos
+                        {% endcomment %}
+                        {% for categoria in tema.categorias %}
 
+                            <a href="{% url 'categoria-detalle-view' tema.pk categoria.nombre %}"
+                               class="list-group-item list-group-item-action"> {{ categoria }} </a>
 
+                        {% endfor %}
+
+                    </div>
+                </td>
+                <td width="400" height="250">
+
+                    <h5>¿Qué es una categoría?</h5>
+                    <p class="text-justify">Una cartegoría permite al usuario diferenciar y caracterizar la búsqueda interna
+                        de cada tema que el usuario ha seleccionado anteriormente. Puede realizar un análisis
+                        por separado de cada una de ellas o una vez hecho de cada una por separado tener un análisis en común.</p>
+                    <p class="text-justify">
+                        Para modificar o actualizar el tema {{ tema }}.
+
+                        Puede añadir nuevas categorías mientras este editando el tema.
+                    </p>
+                    <p>
+                    <div class="container">
+
+                        <h6>
+                            <a href="{% url 'tema-edit-view' tema.pk %}" class="list-group-item list-group-item-action">
+                                Editar {{ tema }}</a>
+                        </h6>
+
+                    </div>
+                    </p>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
+
+
+
 {% endblock %}
 

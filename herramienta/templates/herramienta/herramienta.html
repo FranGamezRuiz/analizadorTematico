@@ -5,28 +5,22 @@
 {% block content %}
 
 
-        <div class="container">
-            <table class="table table-borderless">
-                <tbody>
-                    <tr>
-                        <td>
-                            <img src="{% static 'images/Logo.jpg' %} " width="1000" height="1000" class="img-fluid" >
-                        </td>
-                        <td>
-                            <h1>Herramienta para el Análisis Temático en Twitter</h1>
+
+    <div class="row">
+        <div class="col-lg-auto">
+             <img src="{% static 'images/Logo.jpg' %} " width="250" height="250" class="img-fluid" >
+        </div>
+        <div class="col">
+        <h1>Herramienta para el Análisis Temático en Twitter</h1>
                             <p class="text-justify">Esta herramienta permite la recolección de tweets basados en temáticas.
                                 El usuario puede crear una temática y seleccionar una categoría dentro de ella
                                 y la aplicación recolecta los tweets referentes a ellos en base a lo que el usuario
                                 le pide. Una vez hecho esto, los tweets serán analizados y caracterizados por su
                                 polaridad para, así, informar al usuario la opinión general que se tiene en el mundo
                                 que ha sido publicada en la red social Twitter.</p>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
         </div>
 
+    </div>
 
 
 {% endblock %}

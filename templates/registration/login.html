@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
 {% block content %}
 
     <form class="form-signin" method="post" action="{% url 'login' %}">
         <h1 class="h3 mb-3 font-weight-normal">Inicie sesión</h1>
         {% csrf_token %} <!--Para medida seguridad-->
         <p>
-            {{ form }}
+            {{ form.username|as_crispy_field }}
+            {{ form.password    |as_crispy_field }}
+
         </p>
         <p>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>

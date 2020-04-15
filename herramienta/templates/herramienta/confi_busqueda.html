@@ -1,0 +1,37 @@
+
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <p>
+    <h4>
+        TEMA: {{ tema }}
+    </h4>
+    </p>
+    <p>
+    <h5>
+        CATEGORÍA: {{ categoria }}
+    </h5>
+    </p>
+    <p>
+    <h6>
+        Configurando busqueda: {{ tipo }}
+    </h6>
+    </p>
+
+    <form id="formConfig" method="post">
+        {% csrf_token %}
+        {{ formulario.numeroTweets|as_crispy_field }}
+        {% if tipo == 'historico' %}
+            <p>La fecha a introducir indica la fecha de creación del primer tweet historico que desea recolectar</p>
+        {% elif tipo == 'actual' %}
+            <p>La fecha a introducir indica hasta que fecha recolectar</p>
+        {% endif %}
+        {{ formulario.fechaFin|as_crispy_field }}
+        {{ formulario.maquinaAnalisis|as_crispy_field }}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+
+    </form>
+
+{% endblock %}
+

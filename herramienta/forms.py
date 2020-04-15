@@ -1,4 +1,5 @@
 # CLASE PARA LOS FORMULARIOS
+import datetime
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
@@ -18,3 +19,12 @@ class TemaForm(forms.ModelForm):
         self.helper.form_class = "blue" #clase para el css
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit-name','Enviar'))
+
+class ConfiForm(forms.Form):
+    numeroTweets = forms.IntegerField(label="Número de tweets a recolectar",widget=forms.TextInput( attrs= {
+                    'placeholder':"Numero de tweets: 1, 2, 3 ...",
+                }))
+    fechaFin = forms.DateField(label="Introduzca la fecha",initial=datetime.date.today)
+    CHOICES = (('TextBlob', 'TextBlob'),
+               ('MeaningCloud', 'MeaningCloud'),)
+    maquinaAnalisis = forms.ChoiceField(label="¿Qué máquina de análisis usar?",choices=CHOICES, help_text="Utilice MeaningCloud solo para una recolección de tweets inferior a 10.000 debido a la restricción de la API")

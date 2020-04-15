@@ -3,13 +3,68 @@
 
 
 {% block content %}
-
+    <p>
     <h4>
         TEMA: {{ tema }}
     </h4>
+    </p>
+    <p>
     <h5>
-        CATEGORÍA: {{ categoria }}
+        CATEGORÍA: {{ categoriaN }}
     </h5>
+    </p>
 
+    <p>
+    <div class="row">
+        <div class="col">
+            <p><h6>HISTÓRICA</h6></p>
+            <p><div class="row">
+                <div class="col">
+                    <p>Configurar búsqueda</p>
+                </div>
+                <div class="col">
+                    <a href="{% url 'confi-busqueda-view' tema.pk categoriaN 1 %}" class="list-group-item list-group-item-action"> Histórica</a>
+                </div>
+            </div></p>
+            <p><div class="row">
+                <div class="col">
+                    <p>Observar estadísticas</p>
+                </div>
+                <div class="col">
+                    <a href="{% url 'categoria-detalle-view' tema.pk categoriaN %}" class="list-group-item list-group-item-action">Ver histórica</a>
+                </div>
+            </div></p>
+        </div>
+        <div class="col">
+            <p><h6>ACTUAL</h6></p>
+            <p><div class="row">
+                <div class="col">
+                    <p>Configurar búsqueda</p>
+                </div>
+                <div class="col">
+                    <a href="{% url 'confi-busqueda-view' tema.pk categoriaN 2 %}" class="list-group-item list-group-item-action"> Actual </a>
+                </div>
+            </div></p>
+            <p><div class="row">
+                <div class="col">
+                    <p>Observar estadísticas</p>
+                </div>
+                <div class="col">
+                    <a href="{% url 'categoria-detalle-view' tema.pk categoriaN %}" class="list-group-item list-group-item-action"> Ver actual </a>
+                </div>
+            </div></p>
+        </div>
+
+    </div>
+    </p>
+    <p>
+     <h6>Observar histórica vs actual</h6>
+    </p>
+    <p>
+     <div class="col">
+             <a href="{% url 'categoria-detalle-view' tema.pk categoriaN %}"
+              class="list-group-item list-group-item-action"> histórica vs actual </a>
+     </div>
+    </p>
 {% endblock %}
 
