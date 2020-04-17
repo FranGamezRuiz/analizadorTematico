@@ -4,10 +4,11 @@
 {% block content %}
 
 
-    <h4>
-        TEMA: {{ tema }}
-    </h4>
+
     <div class="container">
+        <h4>
+            TEMA: {{ tema }}
+        </h4>
         <table class="table table-borderless">
             <tbody>
             <tr>
@@ -41,20 +42,49 @@
                         Puede añadir nuevas categorías mientras este editando el tema.
                     </p>
                     <p>
-                    <div class="container">
 
                         <h6>
                             <a href="{% url 'tema-edit-view' tema.pk %}" class="list-group-item list-group-item-action">
                                 Editar {{ tema }}</a>
                         </h6>
 
-                    </div>
                     </p>
 
                 </td>
             </tr>
             </tbody>
         </table>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Actual</h5>
+                            <p class="card-text">Permite la visualización de las estadísticas referentes a la búsqueda del tipo actual.</p>
+                            <a href="{% url 'tema-grGeneral-view' tema.pk 2 %}"class="list-group-item list-group-item-action"> Actual </a>
+                        </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Histórico</h5>
+                            <p class="card-text">Permite la visualización de las estadísticas referentes a la búsqueda del tipo histórico.</p>
+                            <a href="{% url 'tema-grGeneral-view' tema.pk 1 %}"class="list-group-item list-group-item-action"> Histórico </a>
+                        </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Actual e Histórico</h5>
+                            <p class="card-text">Permite visualizar la comparación de las estadísticas historicas frente a las actuales.</p>
+                            <a href="{% url 'tema-grGeneral-view' tema.pk 3 %}"class="list-group-item list-group-item-action"> Actual vs Histórico </a>
+                        </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 

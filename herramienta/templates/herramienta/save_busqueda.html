@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    <div class="container">
     <p><h3>Guardada la búsqueda sobre:</h3></p>
 
     <h4>
@@ -16,7 +16,7 @@
         <p>Palabras clave de la categoría: {{ palabrasClaveCate }}</p>
 
     </h5>
-  
+
     <p>
     <h6>
         Configurando busqueda: {{ tipo }}
@@ -45,7 +45,7 @@
 
     <p>Vuelva a la herramienta <a href="{% url 'tema-list-view' %}">analizador</a></p>
 
-
+    </div>
 
 {% endblock %}
 

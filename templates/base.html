@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script><!--Graficas-->
+    <link rel="icon" href="{% static 'images/Logo.jpg' %} ">
     <link href="{% static 'css/started-template.css' %}" rel="stylesheet"/>
 
     {# Cargamos la librería #}
@@ -22,14 +23,15 @@
     {% include 'navBar.html' %}
 {% endif %}
 
+
 {# Parte que cambia de las paginas #}
-<div class="container">
+
 
     <div class="starter-template">
         {% block content %}{% endblock %}
     </div>
 
-</div><!-- /.container -->
+<!-- /.container -->
 
 {# JS y jQuery Bootstrap #}
 {% bootstrap_javascript jquery='full' %}

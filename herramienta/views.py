@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from herramienta.forms import TemaForm, ConfiForm
-from herramienta.models import Tema
+from herramienta.models import Tema, Tweet
 
 
 # FUNCIONES para las vistas
@@ -30,13 +30,25 @@ def sobreMi_view(request):
 
     return render(request, 'herramienta/herramienta_about_me.html', context)
 
+################################################
+# Función para recoger el tema y categoria
+################################################
+def datos(pk):
+    variable = Tema.objects.all()  # Obtengo Todos los temas
+    tema = variable.filter(pk=pk)  # tengo el tema
+    nombreTema = tema.first()
+    categorias = tema.first().getCategorias()  # tengo las categorias
+    return (tema,nombreTema,categorias)
+
+#################
+#   Categorias
+#################
+
+
 @login_required
 def categoriaDetail_View(request, pk, nombre):
 
-    variable = Tema.objects.all()   #Obtengo Todos los temas
-    tema = variable.filter(pk=pk) #tengo el tema
-    nombreTema = tema.first()
-    categorias = tema.first().getCategorias() #tengo las categorias
+    tema, nombreTema, categorias = datos(pk)
     for categoria in categorias:
         if categoria.nombre == nombre:
             nombreCate = categoria.nombre
@@ -54,10 +66,7 @@ def categoriaDetail_View(request, pk, nombre):
 @login_required
 def confiBusqueda_View(request, pk, nombre, tipo):
 
-    variable = Tema.objects.all()  # Obtengo Todos los temas
-    tema = variable.filter(pk=pk)  # tengo el tema
-    nombreTema = tema.first()
-    categorias = tema.first().getCategorias()  # tengo las categorias
+    tema, nombreTema, categorias = datos(pk)
     for categoria in categorias:
         if categoria.nombre == nombre:
             nombreCate = categoria.nombre
@@ -92,11 +101,9 @@ def confiBusqueda_View(request, pk, nombre, tipo):
 
 @login_required()
 def saveBusqueda_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
-    variable = Tema.objects.all()  # Obtengo Todos los temas
-    tema = variable.filter(pk=pk)  # tengo el tema
-    nombreTema = tema.first()
-    palabrasClaveT = tema.first().palabras_clave
-    categorias = tema.first().getCategorias()  # tengo las categorias
+
+    tema, nombreTema, categorias = datos(pk)
+    palabrasClaveT = nombreTema.palabras_clave
     for categoria in categorias:
         if categoria.nombre == nombre:
             nombreCate = categoria.nombre
@@ -122,6 +129,98 @@ def saveBusqueda_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
 
     return render(request, 'herramienta/save_busqueda.html', context)
 
+########################
+#   Dashboard
+########################
+@login_required()
+def temaGraficas_View(request, pk, tipo, cate):
+
+    tema, nombreTema, categorias = datos(pk)
+    cate = str(cate)
+    if cate != '1':
+        #Pertenece a un tema
+        for categoria in categorias:
+            if categoria.nombre == cate:
+                cate = categoria.nombre
+    else:
+        cate = 'General'
+
+
+    nTipo = int(tipo)
+    if nTipo == 1:
+        tipo = 'Historico'
+    elif nTipo == 2:
+        tipo = 'Actual'
+    else:
+        tipo = 'Actual vs Historico'
+
+    objTweet = Tweet.objects.all()
+    tweetTema = objTweet.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
+    tweetPos = tweetTema.filter(polaridad='Positivo').count()
+    tweetNeg = tweetTema.filter(polaridad='Negativo').count()
+    tweetNeu = tweetTema.filter(polaridad='Neutro').count()
+
+    context = {
+        'tema':nombreTema,
+        'categorias':categorias,
+        'tipo':tipo,
+        'nTipo':nTipo,
+
+        #Grafica
+        'titulo':cate,
+        'labels': ['Negativo', 'Positivo', 'Neutro'],
+        'data': [tweetPos, tweetNeg, tweetNeu],
+        'colors': ["#FF4136", "#0074D9", "#A2EEC6"]
+    }
+    return render(request, "herramienta/tema_graficas.html", context)
+
+
+@login_required()
+def temaGrGeneral_View(request, pk, tipo):
+
+    tema, nombreTema, categorias = datos(pk)
+
+
+    nTipo = int(tipo)
+    if nTipo == 1:
+        tipo = 'Historico'
+    elif nTipo == 2:
+        tipo = 'Actual'
+    else:
+        tipo = 'Actual vs Historico'
+    labels = []
+    data = []
+    colors = []
+    for categoria in categorias:
+        labels.append(categoria.nombre+' positivo')
+        labels.append(categoria.nombre+' negativo')
+        labels.append(categoria.nombre+' neutro')
+        objTweet = Tweet.objects.all()
+        tweetTema = objTweet.filter(tema=nombreTema, busqueda=tipo, categoría=categoria)
+        tweetPos = tweetTema.filter(polaridad='Positivo').count()
+        tweetNeg = tweetTema.filter(polaridad='Negativo').count()
+        tweetNeu = tweetTema.filter(polaridad='Neutro').count()
+        data.append(tweetPos)
+        data.append(tweetNeg)
+        data.append(tweetNeu)
+        colors.append("#FF4136")
+        colors.append("#0074D9")
+        colors.append("#A2EEC6")
+
+
+    context = {
+        'tema':nombreTema,
+        'categorias':categorias,
+        'tipo':tipo,
+        'nTipo':nTipo,
+
+        #Grafica
+        'titulo':'General',
+        'labels': labels,
+        'data': data,
+        'colors': colors
+    }
+    return render(request, "herramienta/tema_grGeneral.html", context)
 
 #########################
 # CLASES para las vistas
