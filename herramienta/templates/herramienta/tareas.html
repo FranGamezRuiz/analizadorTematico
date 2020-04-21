@@ -1,0 +1,83 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+     <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>Procesos no invocados</p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Parámetros</th>
+                            <th scope="col">Hasta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tarea in tareas %}
+                        <tr>
+                            <th scope="row">{{ tarea.pk }}</th>
+                            <td>{{ tarea.task_name }}</td>
+                            <td>{{ tarea.params }}</td>
+                            <td>{{ tarea.repeat_until.date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col">
+                <p>Procesos invocados</p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Parámetros</th>
+                            <th scope="col">Hasta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for completa in completas %}
+                        <tr>
+                            <th scope="row">{{ completa.pk }}</th>
+                            <td>{{ completa.task_name }}</td>
+                            <td>{{ completa.task_params }}</td>
+                            <td>{{ completa.repeat_until.date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <p>Procesos Terminados</p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Parámetros</th>
+                            <th scope="col">Hasta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for completa in completas %}
+                            {% if completa.repeat_until.date <= fechaHoy %}
+                        <tr>
+                            <th scope="row">{{ completa.pk }}</th>
+                            <td>{{ completa.task_name }}</td>
+                            <td>{{ completa.task_params }}</td>
+                            <td>{{ completa.repeat_until.date }}</td>
+                        </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+     </div>
+{% endblock %}
+

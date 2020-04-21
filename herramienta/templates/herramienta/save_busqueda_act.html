@@ -19,7 +19,7 @@
 
     <p>
     <h6>
-        Configurando busqueda: {{ tipo }}
+        Configurando busqueda: Actual
     </h6>
     </p>
     <p>
@@ -29,12 +29,7 @@
     </p>
     <p>
     <h6>
-        {% if tipo == 'historico' %}
-            Desde la fecha:
-        {% elif tipo == 'actual' %}
-            Hasta fecha de recolección:
-        {% endif %}
-            {{ fecha }}
+        Fecha fin de la recolección: {{ fecha }}
     </h6>
     </p>
     <p>

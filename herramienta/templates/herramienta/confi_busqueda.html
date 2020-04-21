@@ -24,11 +24,15 @@
         {% csrf_token %}
         {{ formulario.numeroTweets|as_crispy_field }}
         {% if tipo == 'historico' %}
-            <p>La fecha a introducir indica la fecha de creación del primer tweet historico que desea recolectar</p>
+            <p>Introducir las fechas de inicio y fin de recolección</p>
+
+            {{ formulario.fechaInicio|as_crispy_field }}
+
+            {{ formulario.fechaFin|as_crispy_field }}
         {% elif tipo == 'actual' %}
             <p>La fecha a introducir indica hasta que fecha recolectar</p>
+            {{ formulario.fechaFin|as_crispy_field }}
         {% endif %}
-        {{ formulario.fechaFin|as_crispy_field }}
         {{ formulario.maquinaAnalisis|as_crispy_field }}
         <button type="submit" class="btn btn-primary">Guardar</button>
 

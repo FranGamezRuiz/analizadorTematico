@@ -1,13 +1,16 @@
 from django.conf.urls import url
 
 from herramienta.views import TemaListView, TemaDetailView, sobreMi_view, inicio_view, TemaUpdateView, TemaCreateView, \
-    categoriaDetail_View, confiBusqueda_View, saveBusqueda_View,  temaGrGeneral_View,temaGraficas_View
+    categoriaDetail_View, temaGrGeneral_View, temaGraficas_View, saveBusqHist_View,  saveBusqAct_View, \
+    confiBusqueda_View, tareas_view
 
 urlpatterns = [
 
     url(r'^$', inicio_view, name='inicio-view'),
     url(r'^inicio/$', inicio_view, name='inicio-view'),
     url(r'^sobreMi/$', sobreMi_view, name='sobreMi-view'),
+
+    url(r'^tareas/$', tareas_view, name='tareas-view'),
 
 
     url(r'^analizador/$', TemaListView.as_view(), name='tema-list-view'),
@@ -21,8 +24,13 @@ urlpatterns = [
 
     url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)$', categoriaDetail_View, name='categoria-detalle-view'),
 
+    #Guardar Busqueda
+    url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)/(?P<numTw>[0-9]+)/(?P<fechaInic>[0-9\-\ \:]+)/(?P<fechaFin>[0-9\-\ \:]+)/(?P<maquina>[a-zA-Z]+)$', saveBusqHist_View, name='save-busq-hist-view'),
+    #Configuración actual
+    url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)/(?P<numTw>[0-9]+)/(?P<fechaFin>[0-9\-\ \:]+)/(?P<maquina>[a-zA-Z]+)$', saveBusqAct_View, name='save-busq-act-view'),
+
     url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)$', confiBusqueda_View, name='confi-busqueda-view'),
-    url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)/(?P<numTw>[0-9]+)/(?P<fechaFin>[0-9\-\ \:]+)/(?P<maquina>[a-zA-Z]+)$', saveBusqueda_View, name='save-busqueda-view'),
+
 
 
 ]

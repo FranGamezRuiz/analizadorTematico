@@ -7,8 +7,14 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from herramienta.forms import TemaForm, ConfiForm
+from herramienta.forms import TemaForm, HistoricoForm, ActualForm
 from herramienta.models import Tema, Tweet
+
+#Para la vista tareas
+from background_task.models import Task, CompletedTask
+import datetime
+
+from herramienta.tasks import hello
 
 
 # FUNCIONES para las vistas
@@ -29,6 +35,21 @@ def sobreMi_view(request):
     }
 
     return render(request, 'herramienta/herramienta_about_me.html', context)
+
+@login_required
+def tareas_view(request):
+
+    tareas = Task.objects.all()
+    tareasCompletas = CompletedTask.objects.all()
+    fechaHoy = datetime.date.today()
+
+    context = {
+        'tareas':tareas,
+        'completas':tareasCompletas,
+        'fechaHoy':fechaHoy
+    }
+
+    return render(request, 'herramienta/tareas.html', context)
 
 ################################################
 # Función para recoger el tema y categoria
@@ -63,6 +84,9 @@ def categoriaDetail_View(request, pk, nombre):
 
     return render(request, 'herramienta/categoria_detail.html', context)
 
+##############################
+#   Configuración de Busquedas
+##############################
 @login_required
 def confiBusqueda_View(request, pk, nombre, tipo):
 
@@ -77,17 +101,33 @@ def confiBusqueda_View(request, pk, nombre, tipo):
         tipoN = 'actual'
 
     if request.method == 'POST':
-        formulario = ConfiForm(request.POST)
-        if formulario.is_valid():
-            numeroTweets = formulario.cleaned_data['numeroTweets']
-            fechaFin = formulario.cleaned_data['fechaFin']
-            maquinaAnalisis = formulario.cleaned_data['maquinaAnalisis']
+        if tipoN == 'historico':
+            formulario = HistoricoForm(request.POST)
+            if formulario.is_valid():
+                numeroTweets = formulario.cleaned_data['numeroTweets']
+                fechaInic = formulario.cleaned_data['fechaInicio']
+                fechaFin = formulario.cleaned_data['fechaFin']
+                maquinaAnalisis = formulario.cleaned_data['maquinaAnalisis']
 
-            return redirect('save-busqueda-view', pk=pk, nombre=nombre, tipo=tipo, numTw=numeroTweets, fechaFin=fechaFin,maquina=maquinaAnalisis)
+                return redirect('save-busq-hist-view', pk=pk, nombre=nombre, tipo=tipo, numTw=numeroTweets, fechaInic=fechaInic,
+                                fechaFin=fechaFin, maquina=maquinaAnalisis)
+        else:
+            formulario = ActualForm(request.POST)
+            if formulario.is_valid():
+                numeroTweets = formulario.cleaned_data['numeroTweets']
+                fechaFin = formulario.cleaned_data['fechaFin']
+                maquinaAnalisis = formulario.cleaned_data['maquinaAnalisis']
+
+                return redirect('save-busq-act-view', pk=pk, nombre=nombre, tipo=tipo, numTw=numeroTweets,
+                                fechaFin=fechaFin, maquina=maquinaAnalisis)
 
     else:
-        formulario = ConfiForm()
-    
+        if tipoN == 'historico':
+            formulario = HistoricoForm()
+        else:
+            formulario = ActualForm()
+
+
 
     context = {
         'tema':nombreTema,
@@ -99,35 +139,65 @@ def confiBusqueda_View(request, pk, nombre, tipo):
 
     return render(request, 'herramienta/confi_busqueda.html', context)
 
-@login_required()
-def saveBusqueda_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
+###########################
+#   Guardar Busq Historico
+###########################
 
+@login_required()
+def saveBusqHist_View(request, pk, nombre, tipo, numTw, fechaInic, fechaFin, maquina):
     tema, nombreTema, categorias = datos(pk)
     palabrasClaveT = nombreTema.palabras_clave
     for categoria in categorias:
         if categoria.nombre == nombre:
             nombreCate = categoria.nombre
             palabrasClaveC = categoria.palabras_clave
-    tipo = int(tipo)
-    if tipo == 1:
-        tipoN = 'historico'
-    else:
-        tipoN = 'actual'
 
+    #hello(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaFin,repeat_until=fechaFin)
 
     context = {
         'tema': nombreTema,
-        'palabrasClaveTema':palabrasClaveT,
+        'palabrasClaveTema': palabrasClaveT,
         'categoria': nombreCate,
-        'palabrasClaveCate':palabrasClaveC,
-        'tipo': tipoN,
-        'numTw':numTw,
-        'fecha':fechaFin,
-        'maquinaA':maquina
+        'palabrasClaveCate': palabrasClaveC,
+        'numTw': numTw,
+        'fechaInic':fechaInic,
+        'fechaFin': fechaFin,
+        'maquinaA': maquina
 
     }
 
-    return render(request, 'herramienta/save_busqueda.html', context)
+    return render(request, 'herramienta/save_busqueda_hist.html', context)
+
+
+###########################
+#   Guardar Busq Actual
+###########################
+
+
+@login_required()
+def saveBusqAct_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
+    tema, nombreTema, categorias = datos(pk)
+    palabrasClaveT = nombreTema.palabras_clave
+    for categoria in categorias:
+        if categoria.nombre == nombre:
+            nombreCate = categoria.nombre
+            palabrasClaveC = categoria.palabras_clave
+
+    #hello(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaFin,repeat_until=fechaFin)
+
+    context = {
+        'tema': nombreTema,
+        'palabrasClaveTema': palabrasClaveT,
+        'categoria': nombreCate,
+        'palabrasClaveCate': palabrasClaveC,
+        'numTw': numTw,
+        'fechaFin': fechaFin,
+        'maquinaA': maquina
+
+    }
+
+    return render(request, 'herramienta/save_busqueda_act.html', context)
+
 
 ########################
 #   Dashboard
@@ -222,9 +292,11 @@ def temaGrGeneral_View(request, pk, tipo):
     }
     return render(request, "herramienta/tema_grGeneral.html", context)
 
-#########################
-# CLASES para las vistas
-#########################
+
+
+#####################################
+# CLASES para las vistas sobre temas
+#####################################
 
 
 #Ver lista de Temas
