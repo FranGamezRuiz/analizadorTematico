@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-# Create your views here.
+
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
@@ -14,7 +14,7 @@ from herramienta.models import Tema, Tweet
 from background_task.models import Task, CompletedTask
 import datetime
 
-from herramienta.tasks import hello
+from herramienta.tasks import historico, actual
 
 
 # FUNCIONES para las vistas
@@ -152,8 +152,8 @@ def saveBusqHist_View(request, pk, nombre, tipo, numTw, fechaInic, fechaFin, maq
             nombreCate = categoria.nombre
             palabrasClaveC = categoria.palabras_clave
 
-    #hello(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaFin,repeat_until=fechaFin)
 
+    historico(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaInic, fechaFin)
     context = {
         'tema': nombreTema,
         'palabrasClaveTema': palabrasClaveT,
@@ -183,7 +183,8 @@ def saveBusqAct_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
             nombreCate = categoria.nombre
             palabrasClaveC = categoria.palabras_clave
 
-    #hello(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaFin,repeat_until=fechaFin)
+
+    actual(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaFin)
 
     context = {
         'tema': nombreTema,

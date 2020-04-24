@@ -45,6 +45,5 @@ class ActualForm(forms.Form):
                     'placeholder':"Numero de tweets: 1, 2, 3 ...",
                 }))
     fechaFin = forms.DateField(label="Introduzca la fecha",initial=datetime.date.today)
-    CHOICES = (('TextBlob', 'TextBlob'),
-               ('MeaningCloud', 'MeaningCloud'),)
-    maquinaAnalisis = forms.ChoiceField(label="¿Qué máquina de análisis usar?",choices=CHOICES, help_text="Utilice MeaningCloud solo para una recolección de tweets inferior a 10.000 debido a la restricción de la API")
+    CHOICES = (('TextBlob', 'TextBlob'),)
+    maquinaAnalisis = forms.ChoiceField(label="La máquina de análisis disponible",choices=CHOICES)

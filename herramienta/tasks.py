@@ -1,32 +1,34 @@
 from background_task import background
+from herramienta.utilsTwitter import stream, cursorHist, searchHist
+import datetime
 ###############################################
-#   Tareas que se realizan en segundo plano
+#   Tareas que se realizan en segundo plano   #
 ###############################################
 
 
-###############
-# Prueba back
-###############
-from background_task.models import Task
 
-@background(schedule=5)
-def hello(nombreTema, palabrasClaveT, nombreCate,palabrasClaveC,tipoN, numTw, maquina,fechaFin):
-
-    object = Task.objects.all().count()
-    print(object)
-    print(nombreTema)
-    print(palabrasClaveT)
-    print(nombreCate)
-    print(palabrasClaveC)
-    print(tipoN)
-    print(numTw)
-    print(fechaFin)
-    print(maquina)
-
+#########################
+#     Uso de Cursor     #
+#########################
 @background(schedule=5)
 def historico(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, maquina , fechaInic, fechaFin):
-    pass
+    numTw = int(numTw)
+    if numTw <= 1000:
+        cursorHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaInic, fechaFin)
+    else:
+        searchHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaInic, fechaFin)
 
+#########################
+#   Uso de Streaming    #
+#########################
+#quitar maquina y numTw
 @background(schedule=5)
 def actual(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, maquina, fechaFin):
-    pass
+    fechaHoy = datetime.date.today()
+    fechaHoy = fechaHoy.strftime("%Y-%m-%d")
+    while fechaHoy <= fechaFin:
+        stream(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC)
+        fechaHoy = datetime.date.today()
+        fechaHoy = fechaHoy.strftime("%Y-%m-%d")
+
+
