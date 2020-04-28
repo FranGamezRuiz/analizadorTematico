@@ -27,7 +27,7 @@ urlpatterns = [
     #Guardar Busqueda
     url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)/(?P<numTw>[0-9]+)/(?P<fechaInic>[0-9\-\ \:]+)/(?P<fechaFin>[0-9\-\ \:]+)/(?P<maquina>[a-zA-Z]+)$', saveBusqHist_View, name='save-busq-hist-view'),
     #Configuración actual
-    url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)/(?P<numTw>[0-9]+)/(?P<fechaFin>[0-9\-\ \:]+)/(?P<maquina>[a-zA-Z]+)$', saveBusqAct_View, name='save-busq-act-view'),
+    url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)/(?P<fechaFin>[0-9\-\ \:]+)$', saveBusqAct_View, name='save-busq-act-view'),
 
     url(r'^analizador/tema/(?P<pk>\d+)/(?P<nombre>[a-zA-Z/ ]+)/(?P<tipo>[0-9]+)$', confiBusqueda_View, name='confi-busqueda-view'),
 

@@ -41,9 +41,5 @@ class HistoricoForm(forms.Form):
 #   Formulario Actual
 ########################
 class ActualForm(forms.Form):
-    numeroTweets = forms.IntegerField(label="Número de tweets a recolectar",widget=forms.TextInput( attrs= {
-                    'placeholder':"Numero de tweets: 1, 2, 3 ...",
-                }))
     fechaFin = forms.DateField(label="Introduzca la fecha",initial=datetime.date.today)
-    CHOICES = (('TextBlob', 'TextBlob'),)
-    maquinaAnalisis = forms.ChoiceField(label="La máquina de análisis disponible",choices=CHOICES)
+

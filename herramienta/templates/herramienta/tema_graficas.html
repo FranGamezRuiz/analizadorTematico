@@ -36,9 +36,17 @@
             <h1 class="h2">{{ tema }} {{ titulo }}</h1>
 
           </div>
-
-         <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
-
+         <div>Número de tweets: {{ nTweets }}</div>
+         <div>Número de tweets analizados con TextBlob: {{ tweetsTextBlob }}
+            <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+            <canvas class="my-4" id="myChart2" width="900" height="380"></canvas>
+         </div>
+         {% if tipo != 'Actual' %}
+             <div>Número de tweets analizados con MeaningCloud: {{ tweetsMeaning }}
+                <canvas class="my-4" id="myChart3" width="900" height="380"></canvas>
+                <canvas class="my-4" id="myChart4" width="900" height="380"></canvas>
+             </div>
+         {% endif %}
     </main>
       </div>
 
@@ -58,7 +66,7 @@
             options: {
                 title: {
                     display: true,
-                    text: '{{ titulo }}',
+                    text: 'Porcentaje opiniones con TextBlob',
                 },
                 legend: {
                     disblay: true,
@@ -71,6 +79,77 @@
             }
 
 
+        });
+
+        var ctx = document.getElementById('myChart2').getContext('2d');
+        var myChart3 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ fechas|safe }},
+                datasets: [{
+                    data: {{ valores|safe }},
+                    label: '{{ titulo }}',
+                    borderColor: "#3e95cd",
+                    fill: false
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Evolución de la opinión por días TextBlob'
+                }
+            }
+        });
+
+        var ctx = document.getElementById('myChart3').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+
+            data: {
+                labels: {{labels2|safe}},
+                datasets: [{
+                    data: {{data2|safe}},
+                    backgroundColor: {{colors2|safe}}
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Porcentaje opiniones con MeaningCloud',
+                },
+                legend: {
+                    disblay: true,
+                    position: 'right',
+                    labels: {
+                        fontColor: '#000'
+                    }
+                }
+
+            }
+
+
+        });
+
+        var ctx = document.getElementById('myChart4').getContext('2d');
+        var myChart3 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ fechas2|safe }},
+                datasets: [{
+                    data: {{ valores2|safe }},
+                    label: '{{ titulo }}',
+                    borderColor: "#3e95cd",
+                    fill: false
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Evolución de la opinión por días MeaningCloud'
+                }
+            }
         });
 
     </script>

@@ -114,12 +114,10 @@ def confiBusqueda_View(request, pk, nombre, tipo):
         else:
             formulario = ActualForm(request.POST)
             if formulario.is_valid():
-                numeroTweets = formulario.cleaned_data['numeroTweets']
                 fechaFin = formulario.cleaned_data['fechaFin']
-                maquinaAnalisis = formulario.cleaned_data['maquinaAnalisis']
 
-                return redirect('save-busq-act-view', pk=pk, nombre=nombre, tipo=tipo, numTw=numeroTweets,
-                                fechaFin=fechaFin, maquina=maquinaAnalisis)
+                return redirect('save-busq-act-view', pk=pk, nombre=nombre, tipo=tipo, fechaFin=fechaFin)
+
 
     else:
         if tipoN == 'historico':
@@ -175,7 +173,7 @@ def saveBusqHist_View(request, pk, nombre, tipo, numTw, fechaInic, fechaFin, maq
 
 
 @login_required()
-def saveBusqAct_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
+def saveBusqAct_View(request, pk, nombre, tipo,  fechaFin):
     tema, nombreTema, categorias = datos(pk)
     palabrasClaveT = nombreTema.palabras_clave
     for categoria in categorias:
@@ -183,65 +181,159 @@ def saveBusqAct_View(request, pk, nombre, tipo, numTw, fechaFin, maquina):
             nombreCate = categoria.nombre
             palabrasClaveC = categoria.palabras_clave
 
-
-    actual(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaFin)
+    actual(str(nombreTema), palabrasClaveT, nombreCate, palabrasClaveC, fechaFin)
 
     context = {
         'tema': nombreTema,
         'palabrasClaveTema': palabrasClaveT,
         'categoria': nombreCate,
         'palabrasClaveCate': palabrasClaveC,
-        'numTw': numTw,
         'fechaFin': fechaFin,
-        'maquinaA': maquina
 
     }
 
     return render(request, 'herramienta/save_busqueda_act.html', context)
 
 
-########################
-#   Dashboard
-########################
+#################
+#   Dashboard   #
+#################
+
+#####################
+#   Evolución/dia   #
+#####################
+def evolucionDia(tweets):
+    '''
+    Función para la creación de la grafica para observar la evolución
+    de las opiniones por días, para calcular el número se realiza una
+    media aritmetica con los valores obtenidos del análisis de
+    sentimientos
+    :param tweets: Objeto tweets filtrado
+    :return:
+    '''
+    tweet = tweets.first()
+    fechas = {tweet.fecha_creado: 1}
+    for tweet in tweets:
+        if tweet.fecha_creado not in fechas:
+            fechas[tweet.fecha_creado] = tweet.numero_Polaridad
+        else:
+            numero = float(fechas.get(tweet.fecha_creado))
+            numero += float(tweet.numero_Polaridad)
+            del fechas[tweet.fecha_creado]
+            numero = round(numero, 5)
+            fechas[tweet.fecha_creado] = numero
+    listaFecha = []
+    listaValor = []
+    for fecha, valor in fechas.items():
+        listaFecha.append(fecha)
+        tweetemp = tweets.filter(fecha_creado=fecha)
+        cantidad = tweetemp.count()
+        valor = round(float(valor)/float(cantidad),5)
+        listaValor.append(str(valor))
+    listaValor = list(reversed(listaValor))
+    listaFecha = list(reversed(listaFecha))
+    return (listaFecha, listaValor)
+
+##################
+#   PIE Grafica  #
+##################
+def pieGrafica(tweets):
+    tweetPos = tweets.filter(polaridad='Positivo').count()
+    tweetNeg = tweets.filter(polaridad='Negativo').count()
+    tweetNeu = tweets.filter(polaridad='Neutro').count()
+    return (tweetPos,tweetNeg,tweetNeu)
+
 @login_required()
 def temaGraficas_View(request, pk, tipo, cate):
 
     tema, nombreTema, categorias = datos(pk)
+    allTweets = Tweet.objects.all()  # Obtengo Todos los tweets
+
     cate = str(cate)
     if cate != '1':
-        #Pertenece a un tema
+        #Buscar la categoría
         for categoria in categorias:
             if categoria.nombre == cate:
                 cate = categoria.nombre
-    else:
-        cate = 'General'
-
-
     nTipo = int(tipo)
     if nTipo == 1:
-        tipo = 'Historico'
+        tipo = 'historica'
+        tipoH = 'Historico'
+        tweets = allTweets.filter(categoría=cate, tema=nombreTema, busqueda=tipo)
     elif nTipo == 2:
-        tipo = 'Actual'
+        tipo = 'actual'
+        tipoH = 'Actual'
+        tweets = allTweets.filter(categoría=cate, tema=nombreTema, busqueda=tipo)
     else:
-        tipo = 'Actual vs Historico'
+        tipoH = 'Actual vs Historico'
+        tweets = allTweets.filter(categoría=cate, tema=nombreTema)
+        tweetsH = allTweets.filter(categoría=cate, tema=nombreTema,busqueda='historica')
+        tweetsA = allTweets.filter(categoría=cate, tema=nombreTema,busqueda='actual')
 
-    objTweet = Tweet.objects.all()
-    tweetTema = objTweet.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
-    tweetPos = tweetTema.filter(polaridad='Positivo').count()
-    tweetNeg = tweetTema.filter(polaridad='Negativo').count()
-    tweetNeu = tweetTema.filter(polaridad='Neutro').count()
+    recolectados = tweets.count()
+    tweetPos = 0
+    tweetNeg = 0
+    tweetNeu = 0
+    tweetPosMean = 0
+    tweetNegMean = 0
+    tweetNeuMean = 0
+    contTextBlob = 0
+    contMeaning = 0
+    listaFecha = []
+    listaValor = []
+    listaFechaMean = []
+    listaValorMean = []
+    colores = []
+    labels = []
+    coloresMean = []
+    labelsMean = []
+    if recolectados != 0:
+        tweetsTextBlob = tweets.filter(analisis='TextBlob')
+        tweetsMean = tweets.filter(analisis='MeaningCloud')
+        contTextBlob = tweetsTextBlob.count()
+        contMeaning = tweetsMean.count()
+        if contTextBlob > 0:
+            # Evolución de la opinión por días
+            listaFecha, listaValor = evolucionDia(tweetsTextBlob)
+            # Pie grafica
+            tweetPos, tweetNeg, tweetNeu = pieGrafica(tweetsTextBlob)
+            labels = ['Negativo', 'Positivo', 'Neutro']
+            colores = ["#FF4136", "#0074D9", "#A2EEC6"]
+        if contMeaning > 0:
+            # Evolución de la opinión por días
+            listaFechaMean, listaValorMean = evolucionDia(tweetsMean)
+            # Pie grafica
+            tweetPosMean, tweetNegMean, tweetNeuMean = pieGrafica(tweetsMean)
+            labelsMean = ['Negativo', 'Positivo', 'Neutro']
+            coloresMean = ["#FF4136", "#0074D9", "#A2EEC6"]
+
+
+
 
     context = {
         'tema':nombreTema,
         'categorias':categorias,
-        'tipo':tipo,
+        'tipo':tipoH,
         'nTipo':nTipo,
-
-        #Grafica
+        'nTweets': recolectados,
+        'tweetsTextBlob':contTextBlob,
+        'tweetsMeaning':contMeaning,
+        #Grafica pie TextBlob
         'titulo':cate,
-        'labels': ['Negativo', 'Positivo', 'Neutro'],
-        'data': [tweetPos, tweetNeg, tweetNeu],
-        'colors': ["#FF4136", "#0074D9", "#A2EEC6"]
+        'labels': labels,
+        'data': [tweetNeg, tweetPos, tweetNeu],
+        'colors': colores,
+        #Grafica evolución TextBlob
+        'fechas':listaFecha,
+        'valores':listaValor,
+        # Grafica pie MeaningCloud
+        'labels2': labelsMean,
+        'data2': [tweetNegMean, tweetPosMean, tweetNeuMean],
+        'colors2': coloresMean,
+        # Grafica evolución MeaningCloud
+        'fechas2': listaFechaMean,
+        'valores2': listaValorMean
+
     }
     return render(request, "herramienta/tema_graficas.html", context)
 

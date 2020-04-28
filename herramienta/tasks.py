@@ -21,13 +21,18 @@ def historico(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, ma
 #########################
 #   Uso de Streaming    #
 #########################
-#quitar maquina y numTw
 @background(schedule=5)
-def actual(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, maquina, fechaFin):
+def actual(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , fechaFin):
     fechaHoy = datetime.date.today()
     fechaHoy = fechaHoy.strftime("%Y-%m-%d")
+    vuelta = 1
+    print('entro a buscar ',format(nombreTema))
+    print('con la categoria ',format(nombreCate))
+    print(vuelta)
     while fechaHoy <= fechaFin:
         stream(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC)
+        vuelta += 1
+        print(vuelta)
         fechaHoy = datetime.date.today()
         fechaHoy = fechaHoy.strftime("%Y-%m-%d")
 
