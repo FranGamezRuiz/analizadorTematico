@@ -1,46 +1,40 @@
 {% extends 'base.html' %}
 
+{% block title %}<title>Analisis Tematico | Analizador</title>{% endblock %}
 
 {% block content %}
     <div class="container">
-        <table class="table table-borderless">
-            <tbody>
-            <tr>
-                <td width="400" height="250">
-                    <h4>
-                        Temas
-                    </h4>
-                    <div class="list-group">
 
-                        {% comment %}
-                            Esta es una lista de los temas que hay en la base de datos
-                        {% endcomment %}
-                        {% for tema in tema_list %}
+        <h1>Temas:</h1>
+        <div class="list-group">
 
-                            <a href="{% url 'tema-detalle-view' tema.pk %}"
-                               class="list-group-item list-group-item-action"> {{ tema }} </a>
+            {% comment %}
+            Esta es una lista de los temas que hay en la base de datos
+            {% endcomment %}
+            {% for tema in tema_list %}
 
-                        {% endfor %}
+                <a href="{% url 'tema-detalle-view' tema.pk %}"
+                   class="list-group-item list-group-item-action"> {{ tema }} </a>
 
-                    </div>
-                </td>
-                <td width="400" height="250">
-                    <h5>¿Qué es un Tema?</h5>
-                    <p class="text-justify">Un tema permite al usuario diferenciar y caracterizar la búsqueda que requiere para la
-                        recolección de tweets para analizar
-                        los sentimientos de los usuarios de Twitter.</p>
-                    <h6>
-                        Crear nuevo tema
-                        <a href="{% url 'tema-create-view' %}" class="list-group-item list-group-item-action">
-                            Crear </a>
-                    </h6>
-                </td>
-            </tr>
-            <tr>
+            {% endfor %}
 
-            </tr>
-            </tbody>
-        </table>
+        </div>
+     </div>
+
+    <div class="container">
+         <div class="tema-foto">
+            <div class="maintexto">
+                <h1>Pero,</h1>
+                <h1>¿Qué es un Tema?</h1>
+            </div>
+        </div>
+        <p class="text-justify" style="padding: 5rem 1.5rem;">Un Tema es una caracterización de la búsqueda de Tweets. Se puede crear un
+        tema para conocer la opinión que se tiene sobre él, en el mundo de la red social Twitter. Cuando se desarrolla
+        el tema, el usuario introduce el nombre del tema que va a crear y, a su vez, introduce una lista de palabras clave
+        que indican los posibles nombres por los que se puede encontrar referenciado.</p>
+        <h4>¿Necesitas crear un Tema? Utilice este botón.</h4>
+        <a href="{% url 'tema-create-view' %}" class="list-group-item list-group-item-action">Crear </a>
+
     </div>
 
 

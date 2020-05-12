@@ -9,6 +9,9 @@ import meaningcloud
 import json
 import re
 from unicodedata import normalize
+import unicodedata
+from unidecode import unidecode
+
 
 
 ###########################
@@ -46,7 +49,10 @@ def get_auth(tipo):
 ##################################
 def analisisText(full_text):
     textoTextBlob = TextBlob(full_text)
-    textoIngles = textoTextBlob.translate(to='en')
+    try:
+        textoIngles = textoTextBlob.translate(to='en')
+    except:
+        textoIngles = textoTextBlob
     print(textoIngles)
     polarity = textoIngles.sentiment.polarity
     if polarity < 0:
@@ -110,6 +116,26 @@ def eliminarTildes(texto):
     print("Sin tildes: ",format(texto))
 
     return texto
+##############################################
+#   Quitar los emojis de los tweets          #
+##############################################
+def deEmojify(inputString):
+    returnString = ""
+    for character in inputString:
+        try:
+            character.encode("ascii")
+            returnString += character
+        except UnicodeEncodeError:
+            replaced = unidecode(str(character))
+            if replaced != '':
+                returnString += replaced
+            else:
+                try:
+                     returnString += "[" + unicodedata.name(character) + "]"
+                except ValueError:
+                     returnString += "[x]"
+
+    return returnString
 
 ##############################################
 #     Buscar coincidencias palabras clave    #
@@ -154,6 +180,7 @@ def coincidenciaTexto(texto, categoria, tema, palClaveCate, palClaveTema):
     :param categoria: Categoria a la que pertenece
     :return: categoria perteneciente
     '''
+    print(texto)
     texto = eliminarTildes(texto)
     categoriaT = eliminarTildes(categoria)
     temaT = eliminarTildes(tema)
@@ -196,10 +223,12 @@ def procesarTweet(data,maquina,busqueda, tema, categoria, palClaveCate, palClave
         except:  # No es un retweet
             full_text = data['full_text']
 
+    full_text = deEmojify(full_text)
     categoria, temaEncontrado = coincidenciaTexto(full_text, categoria, tema, palClaveCate, palClaveTema)
+    tweetEncontrado = Tweet.objects.all()
+    encontrado = int(tweetEncontrado.filter(id_twitter=data['id']).count())
 
-    if temaEncontrado != 'no pertenece':
-
+    if temaEncontrado != 'no pertenece' and encontrado <= 0:
         if str(maquina) != 'TextBlob':
             polaridad,polarity = analisisMeaning(full_text)
         else:
@@ -226,7 +255,7 @@ def procesarTweet(data,maquina,busqueda, tema, categoria, palClaveCate, palClave
         tweet.save()
         print('Guardo el tweet porque pertenece a ', format(tema))
     else:
-        print('No guardo el tweet porque no pertenece a ',format(tema))
+        print('No guardo el tweet porque no pertenece a ',format(tema),'o ya estaba en la base de datos')
 
 
 #############################
@@ -308,8 +337,9 @@ def cursorHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
     busqueda = numTw
     sinceId = None
     max_id = -1
-    while contTweet < numTw:
+    while contTweet < busqueda:
         busqueda = busqueda - contTweet
+        print(busqueda)
         try:
             if max_id <= 0:
                 if not sinceId:
@@ -323,19 +353,22 @@ def cursorHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
                     tweetemp = tweepy.Cursor(api.search, palabra, since=fechaInic, until=fechaFin, max_id=str(max_id - 1), since_id=sinceId, lang='es', tweet_mode='extended').items(busqueda)
 
             if not tweetemp:
-                #No encontrado
+                print('No encontrado')
                 break
             for tweet in tweetemp:
+                contTweet += 1
                 tweJason = tweet._json
+                max_id = tweJason['id']
                 procesarTweet(tweJason, str(maquina), 'historica', nombreTema, nombreCate, palabrasClaveC,palabrasClaveT)
 
-            contTweet += len(tweetemp)
-            max_id = tweetemp[-1].id
         except tweepy.TweepError as e:
             time.sleep(60 * 15) #Para los limites de la API
             print(e.reason)
         except StopIteration:
             break
+        print('bucle')
+    print('Termina el bucle')
+    print('Entre ',format(fechaInic),' y ',format(fechaFin),' se han encontrado ',format(contTweet),' de ',format(numTw))
 
 ################################
 #   Recolección con search     #

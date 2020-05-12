@@ -4,11 +4,9 @@
 
 {% block content %}
     <div class="container">
-
-
     <div class="row">
         <div class="col-lg-auto">
-             <img src="{% static 'images/Logo.jpg' %} " width="250" height="250" class="img-fluid" >
+             <img src="{% static 'images/LogoPaginaSinFondo.png' %} " width="450" height="450" class="img-fluid" >
         </div>
         <div class="col">
         <h1>Herramienta para el Análisis Temático en Twitter</h1>
@@ -16,12 +14,64 @@
                                 El usuario puede crear una temática y seleccionar una categoría dentro de ella
                                 y la aplicación recolecta los tweets referentes a ellos en base a lo que el usuario
                                 le pide. Una vez hecho esto, los tweets serán analizados y caracterizados por su
-                                polaridad para, así, informar al usuario la opinión general que se tiene en el mundo
-                                que ha sido publicada en la red social Twitter.</p>
+                                polaridad para, así, informar al usuario la opinión general que se tiene en el mundo.</p>
         </div>
 
     </div>
-
     </div>
+
+    <div class="container" >
+        <div class="sent-foto">
+            <div class="maintexto">
+                <h1>¿Qué es el </h1>
+                <h1>Análisis de Sentimentos?</h1>
+            </div>
+        </div>
+
+        <p class="text-justify" style="padding: 5rem 1.5rem;">El análisis del sentimiento, o minería de opinión, es el uso del procesamiento del lenguaje natural o métodos de lingüística
+            computacional que ayudan a conocer, extraer e identificar información subjetiva del contenido existente en los textos.
+            Dicho de otra manera, es el área de estudio que analiza las opiniones de las personas que reflejan sobre entidades que les rodean,
+            estas pueden ser, productos, lugares, empresas y todo tipo de temas. Unos de los aspectos fundamentales para la utilización
+            del análisis de sentimiento es el uso en redes sociales, ya que permiten hacer una idea de la opinión pública que hay en generar
+            sobre un determinado tema.  </p>
+
+        <p class="text-justify" style="padding: 0rem 1.5rem;">Para realizar un estudio del sentimiento, hay que conocer dos atributos claves
+            que deben aparecer en la información recabada, el objetivo, que hace alusión sobre el tema que se está abordando y, como ya se ha
+            mencionado, el sentimiento, que es el que caracteriza la posición en la que se encuentra la opinión. Con el análisis del sentimiento,
+            se quiere lograr entender la intención que un sujeto pone sobre la frase. Acto seguido, se quiere conocer la valoración que tiene
+            la frase, para ello hay que tener en cuenta la polaridad que contiene. Los tipos de polaridad que contempla esta herramienta son:
+        </p>
+
+        <div class="row">
+            <div class="col-md-4">Positivo
+                <img src="{% static 'images/Positivo.png' %} " width="300" height="300" class="img-fluid" >
+            </div>
+            <div class="col-md-4">Neutro
+                <img src="{% static 'images/Neutro.png' %} " width="300" height="300" class="img-fluid" >
+            </div>
+            <div class="col-md-4">Negativo
+                <img src="{% static 'images/Negativo.png' %} " width="300" height="300" class="img-fluid" >
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="twitter-foto">
+            <div class="maintexto">
+            <h1>¿Por qué el uso de Twitter?</h1>
+            </div>
+        </div>
+
+        <p class="text-justify" style="padding: 8rem 1.5rem; ">
+            Twitter es una red social que cuenta con alrededor de 145 millones de usuarios, los cuales, pueden realizar
+            una publicación utilizando 280 caracteres. Si se contempla que cada usuario pueda realizar tan solo una publicación
+            al día, se puede pensar que cada día se cargan 145 millones de publicaciones, las cuales, tratan de opiniones y es interesante
+            tenerlas en cuenta. Twitter siempre ha sido una página, para la cual, los usuarios la utilizan para mostrar
+            las opiniones sobre las cosas que ocurren alrededor, ya que, gracias a la cantidad de usuarios que hay, se encuentra la facilidad
+            de mover la información a través de esta red y que más gente conozca tu opinión referente a algo que te ha gustado o desilusionado.
+        </p>
+    </div>
+    
 {% endblock %}
+
 

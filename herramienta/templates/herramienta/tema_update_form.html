@@ -1,0 +1,42 @@
+
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}<title>Analisis Tematico | Analizador - Editar {{ tema }}</title>{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+         <div class="tema-foto">
+            <div class="maintexto">
+                <h1>Editando el Tema {{ tema }}</h1>
+            </div>
+         </div>
+
+        <p style="margin-top: 2rem">{% crispy form %}
+        </p>
+
+
+
+    </div>
+
+    <script>
+        var x = document.getElementsByTagName("input");
+
+        for(var i = 0; i < x.length ; i++){
+            var nombre = "id_categorias-"+i+"-nombre"
+            try {
+                if(x[nombre].value != ""){
+                    x[nombre].disabled = true
+                }
+            }catch (e) {
+
+            }
+
+        }
+
+    </script>
+
+{% endblock %}
+

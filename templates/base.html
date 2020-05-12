@@ -6,7 +6,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script><!--Graficas-->
-    <link rel="icon" href="{% static 'images/Logo.jpg' %} ">
+    <link rel="icon" href="{% static 'images/logo.png' %} ">
+    {% block title %}<title>Analisis Tematico</title>{% endblock %}
     <link href="{% static 'css/started-template.css' %}" rel="stylesheet"/>
 
     {# Cargamos la librería #}
@@ -23,9 +24,7 @@
     {% include 'navBar.html' %}
 {% endif %}
 
-
 {# Parte que cambia de las paginas #}
-
 
     <div class="starter-template">
         {% block content %}{% endblock %}

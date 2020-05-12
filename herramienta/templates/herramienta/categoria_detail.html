@@ -1,18 +1,19 @@
 
 {% extends 'base.html' %}
 
+{% block title %}<title>Analisis Tematico | Analizador - {{ tema }} {{ categoriaN }}</title>{% endblock %}
 
 {% block content %}
     <div class="container">
     <p>
-    <h4>
+    <h1>
         TEMA: {{ tema }}
-    </h4>
+    </h1>
     </p>
     <p>
-    <h5>
+    <h2>
         CATEGORÍA: {{ categoriaN }}
-    </h5>
+    </h2>
     </p>
 
     <p>
@@ -45,6 +46,38 @@
 
     </div>
     </p>
+
+    </div>
+
+    <div class="container">
+        <div class="catedetail-foto">
+            <div class="maintexto">
+                <h1>Pero,</h1>
+                <h1>¿Cómo configurar la búsqueda?</h1>
+            </div>
+        </div>
+        <p class="text-justify" style="padding: 5rem 1.5rem;">Se observan dos posibles búsquedas, una referente a la histórica y otra sobre actúal, pero
+            ¿cómo funciona cada una de ellas?, para verlo, se expone por separado ambas opciones.
+        </p>
+        <h6>Histórica</h6>
+        <p class="text-justify" style="padding: 0 1.5rem;">La búsqueda que se realiza en la parte histórica funciona con la función
+            de tweepy, search y cursor, dependiendo de la cantidad de tweets que se deseen recolectar usará una u otra. Si la cantidad
+            de tweets es inferior a 1000 usará la función cursor, en caso contrario, usará search. Para poder realizarla, es necesario
+            introducir dos fechas, una que indica la fecha de inicio que es la más lejana, esta no debe de ser más lejana que a siete días
+            sobre la fecha actual, ya que, la API de Twitter no permite la recolección sobre fechas anteriores, y la fecha fin que es la más
+            cercana a la de hoy. También se ofrece la posibilidad de seleccionar la máquina de análisis que se puede utilizar, textblob o meaningCloud.
+            Se comprueba que la máquina de meaningCloud es más eficiente, debido a que su análisis es más exacto que la de textblob, el único
+            problema, es que la API que ofrece la empresa MeaningCloud, solo permite el análisis de 20.000 peticiones al mes y si se realizan
+            muchas búsquedas no se puede realizar más, en cambio, textblob no tiene limitaciones.
+        </p>
+        <h6>Actual</h6>
+        <p class="text-justify" style="padding: 0 1.5rem;">La búsqueda que se realiza en la parte actual funciona con la función
+            de tweepy, streaming. Para poder realizarla, es necesario introducir una fecha, esta es la que indica hasta que fecha
+            se debe de realizar la búsqueda, una vez que pasa esa fecha, la búsqueda para. La máquina de análisis que se utiliza
+            en esta opción es TextBlob, debido a que no tiene limitación de análisis.
+        </p>
+
+
 
     </div>
 {% endblock %}

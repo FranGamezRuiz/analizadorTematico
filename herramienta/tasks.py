@@ -17,6 +17,7 @@ def historico(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, ma
         cursorHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaInic, fechaFin)
     else:
         searchHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaInic, fechaFin)
+    print('Termina el proceso')
 
 #########################
 #   Uso de Streaming    #
@@ -35,5 +36,6 @@ def actual(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , fechaFin):
         print(vuelta)
         fechaHoy = datetime.date.today()
         fechaHoy = fechaHoy.strftime("%Y-%m-%d")
+    print('Termina el proceso')
 
 

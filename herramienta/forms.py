@@ -5,20 +5,57 @@ from crispy_forms.layout import Submit
 from django import forms
 from herramienta.models import Tema, Categoria
 
-#####################
-#   Formulario Temas
-#####################
+class CateForm(forms.ModelForm):
+    class Meta:
+        model=Categoria
+        fields = ['nombre', 'palabras_clave']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+
+        self.helper = FormHelper() #Lo que lleva el formulario
+        self.helper.form_id = "cate-form" #el id
+        self.helper.form_class = "blue" #clase para el css
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit-name','Enviar'))
+###############################
+#   Formulario Creando Temas  #
+###############################
 class TemaForm(forms.ModelForm):
+
     class Meta:
         model=Tema
         fields = ['nombre', 'palabras_clave', 'categorias']
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
 
         self.helper = FormHelper() #Lo que lleva el formulario
         self.helper.form_id = "tema-form" #el id
-        self.helper.form_class = "blue" #clase para el css
+        self.helper.form_class = "tema-form" #clase para el css
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit-name','Enviar'))
+
+
+###############################
+#   Formulario Creando Temas  #
+###############################
+class TemaUpdateForm(forms.ModelForm):
+    # class Meta:
+    #     model=Tema
+    #     fields = ['nombre', 'palabras_clave', 'categorias']
+
+    class Meta:
+        model=Tema
+        fields = ['palabras_clave','categorias']
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+
+        self.helper = FormHelper() #Lo que lleva el formulario
+        self.helper.form_id = "tema-update-form" #el id
+        self.helper.form_class = "tema-update-form" #clase para el css
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit-name','Enviar'))
 

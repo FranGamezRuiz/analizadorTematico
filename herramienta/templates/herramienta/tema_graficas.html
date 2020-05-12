@@ -1,6 +1,7 @@
 
 {% extends 'base.html' %}
 
+{% block title %}<title>Analisis Tematico | Analizador - DashBoard {{ tema }}</title>{% endblock %}
 
 {% block content %}
 
@@ -8,21 +9,35 @@
     <!--Menu lateral-->
 
       <div class="row">
-        <nav class="col-md-2 d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-md-block {#bg-light#} sidebar" style="background-color: #004F6D;">
 
           <div  class="sidebar-sticky">
             <ul class="nav flex-column">
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>{{ tipo }}</span>
+                    <span><div class="btn-group">
+                            <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false" style="color: white!important;">
+                                {{ tipo }}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 2 %}">Actual</a>
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 1 %}" >Histórico</a>
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 3 %}" >Actual vs histórico</a>
+                            </div>
+                        </div></span>
                 </h6>
                 <li class="nav-item">
-                    <a class="nav-link d-flex" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
                 </li>
                 {% for categoria in categorias %}
                     <li class="nav-item">
-                        <a class="nav-link d-flex" href="{% url 'tema-graficas-view' tema.pk nTipo categoria%}">{{ categoria.nombre }}</a>
+                        <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-graficas-view' tema.pk nTipo categoria%}">{{ categoria.nombre }}</a>
                     </li>
                 {% endfor %}
+                <li class="nav-link">
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-detalle-view' tema.pk %}" > Volver al tema {{ tema }} </a>
+                </li>
             </ul>
           </div>
 
@@ -33,40 +48,95 @@
 
      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">{{ tema }} {{ titulo }}</h1>
-
+            <h1 class="h2" style="color: black;text-shadow: -1px 0 white, 0 1px white,1px 0 white, 0 -1px white;">{{ tema }} {{ titulo }}</h1>
           </div>
-         <div>Número de tweets: {{ nTweets }}</div>
-         <div>Número de tweets analizados con TextBlob: {{ tweetsTextBlob }}
-            <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
-            <canvas class="my-4" id="myChart2" width="900" height="380"></canvas>
-         </div>
-         {% if tipo != 'Actual' %}
-             <div>Número de tweets analizados con MeaningCloud: {{ tweetsMeaning }}
-                <canvas class="my-4" id="myChart3" width="900" height="380"></canvas>
-                <canvas class="my-4" id="myChart4" width="900" height="380"></canvas>
-             </div>
-         {% endif %}
+        {% if tipo == 'Actual vs Histórico' %}
+            <div class="row">
+                    <div class="col-lg-auto">
+                        <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
+                            <p>Tweets:</p>
+                            <p> {{ nTweets }}</p>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
+                            <p>Array con el valor Negativo, Positivo y Neutro</p>
+                            <p>Opiniones Actual: {{ dataAct }}</p>
+                            <p>Opiniones Historico: {{ dataHist }}</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
+                            <p>A continuación, se puede observar las gráficas con el porcentaje que se calcula
+                            con el número total de tweets y la cantidad de cada polaridad que se han recolectado para
+                            la categoria {{ titulo }}.</p>
+                        </div>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col">
+                <canvas class="my-4" id="myChart5" width="50" height="50" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                </div>
+            <div class="col">
+                <canvas class="my-4" id="myChart6" width="50" height="50" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+            </div>
+            </div>
+
+
+            <canvas class="my-4" id="myChart7" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+        {% else %}
+            <div class="row">
+                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">Número de tweets: {{ nTweets }}</div></div>
+                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">
+                        Número de tweets analizados con TextBlob: {{ tweetsTextBlob }}</div></div>
+                {% if tipo != 'Actual' %}
+                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">
+                        Número de tweets analizados con MeaningCloud: {{ tweetsMeaning }}</div></div>
+                {% endif %}
+            </div>
+
+            {% if tweetsTextBlob == 0 %}
+                Alguna imagen con pajaro con lupa para buscar
+            {% else %}
+                <div>
+                    <canvas class="my-4" id="myChart" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                    <canvas class="my-4" id="myChart2" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                </div>
+            {% endif %}
+            {% if tipo != 'Actual' %}
+                {% if tweetsMeaning == 0 %}
+                    Alguna imagen con pajaro con lupa para buscar
+                {% else %}
+                    <div>Número de tweets analizados con MeaningCloud: {{ tweetsMeaning }}
+                        <canvas class="my-4" id="myChart3" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                        <canvas class="my-4" id="myChart4" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
     </main>
       </div>
 
 
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        if ("{{ tipo }}" == 'Actual vs Histórico'){
+            //////Actual-Historico/////////////
+        var ctx = document.getElementById('myChart5').getContext('2d');
+        var myChart5 = new Chart(ctx, {
             type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
 
             data: {
                 labels: {{labels|safe}},
                 datasets: [{
-                    data: {{data|safe}},
+                    data: {{dataAct|safe}},
                     backgroundColor: {{colors|safe}}
                 }]
             },
             options: {
                 title: {
                     display: true,
-                    text: 'Porcentaje opiniones con TextBlob',
+                    text: 'Porcentaje opiniones actual',
                 },
                 legend: {
                     disblay: true,
@@ -80,43 +150,21 @@
 
 
         });
-
-        var ctx = document.getElementById('myChart2').getContext('2d');
-        var myChart3 = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {{ fechas|safe }},
-                datasets: [{
-                    data: {{ valores|safe }},
-                    label: '{{ titulo }}',
-                    borderColor: "#3e95cd",
-                    fill: false
-                }
-                ]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Evolución de la opinión por días TextBlob'
-                }
-            }
-        });
-
-        var ctx = document.getElementById('myChart3').getContext('2d');
-        var myChart = new Chart(ctx, {
+        var ctx = document.getElementById('myChart6').getContext('2d');
+        var myChart6 = new Chart(ctx, {
             type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
 
             data: {
-                labels: {{labels2|safe}},
+                labels: {{labels|safe}},
                 datasets: [{
-                    data: {{data2|safe}},
-                    backgroundColor: {{colors2|safe}}
+                    data: {{dataHist|safe}},
+                    backgroundColor: {{colors|safe}}
                 }]
             },
             options: {
                 title: {
                     display: true,
-                    text: 'Porcentaje opiniones con MeaningCloud',
+                    text: 'Porcentaje opiniones historico',
                 },
                 legend: {
                     disblay: true,
@@ -127,30 +175,136 @@
                 }
 
             }
-
-
         });
+        var ctx = document.getElementById('myChart7').getContext('2d');
+            var myChart7 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ fechasAct|safe }},
+                    datasets: [{
+                        data: {{ valoresAct|safe }},
+                        label: 'Actual',
+                        borderColor: "#cd4ccb",
+                        fill: false
+                    },{
+                        data: {{ valoresHist|safe }} ,
+                        label: 'Historico',
+                        borderColor: "#ff8610",
+                        fill: false
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Evolución de la opinión por días'
+                    }
+                }
+            });
 
-        var ctx = document.getElementById('myChart4').getContext('2d');
-        var myChart3 = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {{ fechas2|safe }},
-                datasets: [{
-                    data: {{ valores2|safe }},
-                    label: '{{ titulo }}',
-                    borderColor: "#3e95cd",
-                    fill: false
+
+        }else
+        {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+
+                data: {
+                    labels: {{labels|safe}},
+                    datasets: [{
+                        data: {{data|safe}},
+                        backgroundColor: {{colors|safe}}
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Porcentaje opiniones con TextBlob',
+                    },
+                    legend: {
+                        disblay: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: '#000'
+                        }
+                    }
+
                 }
-                ]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Evolución de la opinión por días MeaningCloud'
+
+
+            });
+
+            var ctx = document.getElementById('myChart2').getContext('2d');
+            var myChart2 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ fechas|safe }},
+                    datasets: [{
+                        data: {{ valores|safe }},
+                        label: '{{ titulo }}',
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Evolución de la opinión por días TextBlob'
+                    }
                 }
-            }
-        });
+            });
+
+            var ctx = document.getElementById('myChart3').getContext('2d');
+            var myChart3 = new Chart(ctx, {
+                type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+
+                data: {
+                    labels: {{labels2|safe}},
+                    datasets: [{
+                        data: {{data2|safe}},
+                        backgroundColor: {{colors2|safe}}
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Porcentaje opiniones con MeaningCloud',
+                    },
+                    legend: {
+                        disblay: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: '#000'
+                        }
+                    }
+
+                }
+
+
+            });
+
+            var ctx = document.getElementById('myChart4').getContext('2d');
+            var myChart4 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ fechas2|safe }},
+                    datasets: [{
+                        data: {{ valores2|safe }},
+                        label: '{{ titulo }}',
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Evolución de la opinión por días MeaningCloud'
+                    }
+                }
+            });
+        }
 
     </script>
 {% endblock %}
