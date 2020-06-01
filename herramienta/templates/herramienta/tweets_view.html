@@ -1,0 +1,98 @@
+
+{% extends 'base.html' %}
+
+{% block title %}<title>Analisis Tematico | Analizador - Tweets {{ tema }} {{ titulo }}</title>{% endblock %}
+
+{% block content %}
+
+
+    <!--Menu lateral-->
+
+      <div class="row">
+        <nav class="col-md-2 d-md-block {#bg-light#} sidebar" style="background-color: #004F6D;">
+
+          <div  class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span><div class="btn-group">
+                            <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false" style="color: white!important;">
+                                {{ tipo }}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 2 %}">Actual</a>
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 1 %}" >Histórico</a>
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 3 %}" >Actual vs histórico</a>
+                            </div>
+                        </div></span>
+                </h6>
+                <li class="nav-item">
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
+                </li>
+                {% for categoria in categorias %}
+                    <li class="nav-item">
+                        <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-graficas-view' tema.pk nTipo categoria%}">{{ categoria.nombre }}</a>
+                    </li>
+                {% endfor %}
+                <li class="nav-link">
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-detalle-view' tema.pk %}" > Volver al tema {{ tema }} </a>
+                </li>
+            </ul>
+          </div>
+
+        </nav>
+
+
+    <!--Contenido de la página-->
+
+     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h2" style="color: black;text-shadow: -1px 0 white, 0 1px white,1px 0 white, 0 -1px white;">{{ tema }} {{ titulo }}</h1>
+              <a class="nav-link d-flex" style="color: white!important;" href="{% url 'csv-view' tema.pk nTipo titulo %}" > Exportar CSV </a></td>
+
+          </div>
+
+         {% for tweet in tweets %}
+             <div class="tweet">
+                {% if tweet.polaridad == 'Positivo' %}
+                    <div class="logoP">
+                {% elif tweet.polaridad == 'Negativo' %}
+                    <div class="logoN">
+                {% else %}
+                    <div class="logoNeu">
+                {% endif %}
+                <div class="idtweet">ID:{{ tweet.id_twitter }}</div>
+             </div>
+                <div class="textotweet">{{ tweet.texto }}</div>
+                <div class="tematweet">Tema: {{ tweet.tema }} Categoría: {{ tweet.categoría }}</div>
+                <div>Tipo de Búsqueda: {{ tweet.busqueda }} </div>
+                <div>Tipo de Análisis: {{ tweet.analisis }} </div>
+                <div class="polatweet">Polaridad: {{ tweet.numero_Polaridad }}</div>
+                <div class="fechatweet">{{ tweet.fecha_creado }}</div>
+             </div>
+
+         {% endfor %}
+
+
+         <nav aria-label="Page navigation" style="margin-top: 1rem">
+             <ul class="pagination justify-content-center">
+                 {% if page_obj.has_previous %}
+                     <li class="page-item"><a class="page-link" href="?page=1">&laquo; primera</a></li>
+                     <li class="page-item"><a class="page-link"  href="?page={{ page_obj.previous_page_number }}">anterior</a>
+                {% endif %}
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Pág {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" <a href="?page={{ page_obj.next_page_number }}">siguiente</a></li>
+                    <li class="page-item"><a class="page-link" <a href="?page={{ page_obj.paginator.num_pages }}">última &raquo;</a></li>
+                {% endif %}
+                 </li>
+             </ul>
+         </nav>
+
+    </main>
+
+      </div>
+
+{% endblock %}
+

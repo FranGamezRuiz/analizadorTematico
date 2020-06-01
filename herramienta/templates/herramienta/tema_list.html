@@ -37,6 +37,114 @@
 
     </div>
 
+    <div class="container">
+         <div class="tweet-foto">
+            <div class="maintexto">
+                <h1>Objeto Tweet</h1>
+            </div>
+        </div>
+        <p class="text-justify" style="padding: 5rem 1.5rem;">El objeto tweet de la herramienta contiene la información
+            que se recolecta de la red social Twitter a través del propio tweet. En la red social, el
+            objeto tiene mucha información que se desecha, como por ejemplo, información no interesante
+            del usuario, foto de perfíl, descripción del mismo, y otra información esencial para el
+            uso de esta herramienta, el texto, que describirá la opinión que se recoge de él, la
+            localización geográfica, si es un retweet o es favorito, es decir, que este tweet es una
+            referencia a otro tweet que se creó, el número de retweet y favoritos. Gracias a estos datos,
+            la herramienta genera un objeto con las siguientes características:</p>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>fecha_creado</td>
+                <td>Informa de la fecha en la que se creó el tweet.</td>
+            </tr>
+            <tr>
+                <td>id_twitter</td>
+                <td>Es el id único que tiene el tweet en la red social Twitter.</td>
+            </tr>
+            <tr>
+                <td>texto</td>
+                <td>Texto publicado en el tweet.</td>
+            </tr>
+            <tr>
+                <td>truncado</td>
+                <td>Informa si el texto fue truncado debido a si su longitud supera la cantidad de 140 caracteres permitidos.</td>
+            </tr>
+            <tr>
+                <td>geo</td>
+                <td>Contiene información sobre la latitud y longitud de la geolocalización. En algunos está en desuso, pero en otros puede contenerlo.</td>
+            </tr>
+            <tr>
+                <td>coordenadas</td>
+                <td>Contiene la información sobre la longitud y la latidud de la geolocalización.</td>
+            </tr>
+            <tr>
+                <td>place</td>
+                <td>Indica si el tweet está asociado a un lugar en específico.</td>
+            </tr>
+            <tr>
+                <td>numero_ret</td>
+                <td>Cantidad de retweet que tiene el tweet.</td>
+            </tr>
+            <tr>
+                <td>numero_fav</td>
+                <td>Cantidad de favoritos que tiene el tweet.</td>
+            </tr>
+            <tr>
+                <td>esFavorito</td>
+                <td>Indica si el tweet ha sido autenticado por el usuario.</td>
+            </tr>
+            <tr>
+                <td>esRetweet</td>
+                <td>Indica si el tweet a sido un retweet de otro.</td>
+            </tr>
+            <tr>
+                <td>idioma</td>
+                <td>Indica el idioma al que pertenece el tweet.</td>
+            </tr>
+            <tr>
+                <td>tema</td>
+                <td>Tema al que pertenece el tweet.</td>
+            </tr>
+            <tr>
+                <td>categoría</td>
+                <td>Categoría al que pertenece el tweet.</td>
+            </tr>
+            <tr>
+                <td>polaridad</td>
+                <td>Hace referencia a la polaridad del tweet, Positiva, Negativa o Neutra</td>
+            </tr>
+            <tr>
+                <td>numero_Polaridad</td>
+                <td>Índice de la polaridad con un rango [-1,1] indicado -1 al negativo y 1 al positivo. Este rango es un número decimal</td>
+            </tr>
+            <tr>
+                <td>busqueda</td>
+                <td>Indica la búsqueda realizada en la que se encontró el tweet, Actual o Histórica.</td>
+            </tr>
+            <tr>
+                <td>analisis</td>
+                <td>Análisis de sentimientos utilizado para conocer la polaridad, TextBlob o MeaningCloud.</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="text-justify" style="padding: 5rem 1.5rem;">Utilice el siguiente botón para exportar los tweets
+        de la herramienta con la estructura anterior en archivo CSV.</p>
+
+        <a href="{% url 'csv-all-view' %}" class="btn btn-outline-primary">exportar </a>
+
+
+
+
+
+    </div>
+
 
 
 {% endblock %}

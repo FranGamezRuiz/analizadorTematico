@@ -49,7 +49,7 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h1 class="h2" style="color: black;text-shadow: -1px 0 white, 0 1px white,1px 0 white, 0 -1px white;">{{ tema }} General</h1>
-
+                <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tweets-view' tema.pk nTipo 'General' %}" > Ver tweets </a>
             </div>
             {% if tipo == 'Actual vs Histórico' %}
                 <div class="row">
@@ -67,13 +67,18 @@
                             <p>Gráfica Histórico: {{ dataHist }}</p>
                         </div>
                     </div>
-                    <div class="col">
-                        <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
-                            <p>A continuación, se puede observar ambas gráficas con el porcentaje que se calcula
-                            con el número total de tweets y la cantidad de cada polaridad que se han recolectado.</p>
-                        </div>
-                    </div>
+
                 </div>
+                <p class="text-justify">Obsérvese las graficas conseguidas a través de la recolección de los tweets sobre
+            el tema {{ tema }}. Se observan dos gráficas de forma de tarta, una correspondiente
+            a los datos que se recolectan usando la búsqueda actual usando la función streaming() de la
+            API de Twitter y la siguiente representa a los recolectados con la búsqueda histórica
+            con la función search(). Para represetar el porcentaje de de cada una de ellas, se recoge el
+            total de tweets que representa el 100%, una vez hecho esto, se calcula el porcentaje
+            que representa a cada polaridad y así, tener una visión de cuál es la opinión que más
+            destaca sobre el tema. Si el número de porcentaje de positivo es mayor que los otros dos,
+                se puede concluir que el tema {{ tema }} tiene una opinión general positiva. Se pueden observar
+                la  diferencia que se obtiene dependiendo de la búsqueda utilizada.</p>
                 <div class="row">
                     <div class="col">
                         <canvas class="my-4" id="myChart5" width="25" height="25" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
@@ -83,7 +88,17 @@
                         <canvas class="my-4" id="myChart6" width="25" height="25" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
                     </div>
                 </div>
-
+                <p class="text-justify">Esta gráfica permite la visualización de la evolución de la opinión que ha tenido el
+            tema {{ tema }} a lo largo del tiempo de búsqueda que se ha realizado, se observan dos
+            líneas, una representando la búsqueda actual y otra la búsqueda histórica. Para realizar
+            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tweet
+            recolectado y se calcula una media aritmetica de los tweets que se publicaron el mismo día.
+            Así, se obtiene la evolución de la opinión. Esto sirve para conocer en que momento se aumentó
+            o disminuyó la positividad o negatividad de las opiniones y así poder conocer a que se debe. Si
+            en el tema {{ tema }} hubo una modificación de algo un día concreto, si la opinión positiva crece
+            a partir de ese día, se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea,
+            si es al contrario y se obtiene mayor número de tweets de polaridad negativa, se conoce la
+                 consecuencia directa de ese descontento.</p>
                 <canvas class="my-4" id="myChart7" width="900" height="380"  style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
 
             {% else %}
@@ -101,15 +116,33 @@
                             <p>Gráfica: {{ data }}</p>
                         </div>
                     </div>
-                    <div class="col">
-                        <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
-                            <p>A continuación, se puede observar la gráfica con el porcentaje que se calcula
-                            con el número total de tweets y la cantidad de cada polaridad que se han recolectado.</p>
-                        </div>
-                    </div>
                 </div>
+                <p class="text-justify">Obsérvese la grafica conseguida a través de la recolección de los tweets sobre
+            el tema {{ tema }}. Se observan una gráfica PIE, correspondiente a los datos que se han recolectado a
+                    través del tipo de busqueda {{ tipo }}. Para represetar el porcentaje, se recoge el
+            total de tweets que representa el 100%, una vez hecho esto, se calcula el porcentaje
+            que representa a cada polaridad y así, tener una visión de cuál es la opinión que más
+            destaca sobre el tema. Si el número de porcentaje de positivo es mayor que los otros dos,
+                se puede concluir que el tema {{ tema }} tiene una opinión general positiva</p>
                 <canvas class="my-4" id="myChart" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                <p class="text-justify">La siguiente grafica, es una gráfica de barras que representa
+                las polaridades de las categorías que se han recogido sobre el tema {{ tema }}. Esto permite
+                observar desde una sola vista, cual es la representación de la opinión de cada categoría y así
+                conocer cuál es la que mejor según la opinión que tienen los usarios de Twitter. Gracias a esto,
+                si el usuario estaba en duda entre alguna categoría para seleccionar una de ellas como la mejor
+                opción, puede ayudarse gracias a la opinión que se ha tenido. Si todas las categorías tienen como
+                mayor porcentaje el positivo, también se observa el diferente porcentaje de cada una de ellas y
+                así conocer cuál es el número al que representa respecto a la totalidad.</p>
                 <canvas class="my-4" id="myChart2" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                <p class="text-justify">Esta gráfica permite la visualización de la evolución de la opinión que ha tenido el
+            tema {{ tema }} a lo largo del tiempo de búsqueda que se ha realizado, se observan diferentes
+            líneas, cada una representa una categoría diferente, se puede observar que cada una tiene un color diferente
+                    y se puede ver cual es la que representa. Para realizar
+            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tweet
+            recolectado y se calcula una media aritmetica de los tweets que se publicaron el mismo día y a la categoría a la que pertenece.
+            Así, se obtiene la evolución de la opinión. Esto sirve para conocer en que momento se aumentó
+            o disminuyó la positividad o negatividad de las opiniones y así poder conocer a que se debe. Se puede
+                ver con mayor perspectiva si afecta directamente las opiniones entre las categorías que hay en el tema.</p>
                 <canvas class="my-4" id="myChart3" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
             {% endif %}
           </div>

@@ -1,14 +1,29 @@
+from decimal import Decimal
+
+from bson import Decimal128
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
-
-
+from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.shortcuts import redirect
+import csv
+from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from herramienta.forms import TemaForm, HistoricoForm, ActualForm, TemaUpdateForm, CateForm
+from herramienta.forms import TemaForm, HistoricoForm, ActualForm, TemaUpdateForm
 from herramienta.models import Tema, Tweet
+#Para wordcloud
+from herramienta.utilsTexto import procesarTexto
+from django.shortcuts import render
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import io
+import urllib, base64
+from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+ps = PorterStemmer()
+wnl = WordNetLemmatizer()
 
 #Para la vista tareas
 from background_task.models import Task, CompletedTask
@@ -64,8 +79,6 @@ def datos(pk):
 #################
 #   Categorias
 #################
-
-
 @login_required
 def categoriaDetail_View(request, pk, nombre):
 
@@ -268,6 +281,25 @@ def valorOrdenFecha(listaFecha, fechasTH, fechasT):
             array2.append(0.0)
     return (array1,array2)
 
+#########################
+#   imagen wordcloud    #
+#########################
+def imagenPalabras(tweets):
+    text = ''
+    for tweet in tweets:
+        text += tweet.texto
+    text = procesarTexto(text)
+    wc = WordCloud(scale=10, max_words=100, background_color="white").generate(text)
+    plt.figure(figsize=(32, 18))
+    plt.imshow(wc, interpolation="bilinear", aspect='auto')
+    plt.axis("off")
+    fig = plt.gcf()
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = 'data:image/png;base64,' + urllib.parse.quote(string)
+    return uri
 
 @login_required()
 def temaGraficas_View(request, pk, tipo, cate):
@@ -296,6 +328,14 @@ def temaGraficas_View(request, pk, tipo, cate):
         tweetsH = allTweets.filter(categoría=cate, tema=nombreTema,busqueda='historica')
         tweetsA = allTweets.filter(categoría=cate, tema=nombreTema,busqueda='actual')
 
+    #########
+
+    try:
+        uri = imagenPalabras(tweets)
+    except:
+        uri = ''
+
+    #########
     recolectados = tweets.count()
     tweetPos = 0
     tweetNeg = 0
@@ -396,6 +436,8 @@ def temaGraficas_View(request, pk, tipo, cate):
         # Grafica evolución Act
         'fechasAct': listaFecha,
         'valoresAct': listaValor,
+        #######
+        'image': uri
 
     }
     return render(request, "herramienta/tema_graficas.html", context)
@@ -533,7 +575,112 @@ def temaGrGeneral_View(request, pk, tipo):
     }
     return render(request, "herramienta/tema_grGeneral.html", context)
 
+#############################
+#   Vista para los tweets   #
+#############################
+@login_required()
+def tweetCate_View(request, pk,  tipo, cate):
+    tema, nombreTema, categorias = datos(pk)
 
+    tweets = Tweet.objects.all()
+
+    nTipo = int(tipo)
+    if nTipo == 1:
+        tipo = 'historica'
+        tipoH = 'Histórico'
+        if cate == 'General':
+            tweets = tweets.filter(tema=nombreTema, busqueda=tipo)
+        else:
+            tweets = tweets.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
+    elif nTipo == 2:
+        tipo = 'actual'
+        tipoH = 'Actual'
+        if cate == 'General':
+            tweets = tweets.filter(tema=nombreTema, busqueda=tipo)
+        else:
+            tweets = tweets.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
+    else:
+        tipoH = 'Actual vs Histórico'
+        if cate == 'General':
+            tweets = tweets.filter(tema=nombreTema)
+        else:
+            tweets = tweets.filter(tema=nombreTema, categoría=cate)
+
+    paginator = Paginator(tweets, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+
+    context = {
+        'tema':nombreTema,
+        'categorias':categorias,
+        'tipo':tipoH,
+        'nTipo':nTipo,
+        'titulo':cate,
+        'tweets':tweets,
+        'page_obj': page_obj
+    }
+    return render(request, "herramienta/tweets_view.html", context)
+
+#######################
+#    Descarga CSV     #
+#######################
+@login_required()
+def csvdownload_View(request, pk, tipo, cate):
+    tema, nombreTema, categorias = datos(pk)
+
+    tweets = Tweet.objects.all()
+    nTipo = int(tipo)
+    if nTipo == 1:
+        tipo = 'historica'
+        if cate == 'General':
+            tweets = tweets.filter(tema=nombreTema, busqueda=tipo)
+            nombrefichero = 'tweets_' + str(nombreTema) + '_' + tipo
+        else:
+            tweets = tweets.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
+            nombrefichero = 'tweets_' + str(nombreTema) + '_' + cate + '_' + tipo
+    elif nTipo == 2:
+        tipo = 'actual'
+        if cate == 'General':
+            tweets = tweets.filter(tema=nombreTema, busqueda=tipo)
+            nombrefichero = 'tweets_' + str(nombreTema) + '_' + tipo
+        else:
+            tweets = tweets.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
+            nombrefichero = 'tweets_' + str(nombreTema) + '_' + cate + '_' + tipo
+    else:
+        if cate == 'General':
+            tweets = tweets.filter(tema=nombreTema)
+            nombrefichero = 'tweets_' + str(nombreTema)
+        else:
+            tweets = tweets.filter(tema=nombreTema, categoría=cate)
+            nombrefichero = 'tweets_' + str(nombreTema) + '_' + cate
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="'+nombrefichero+'.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['fecha_creado','id_twitter','texto','truncado','geo','coordenadas','place','numero_ret','numero_fav','esFavorito','esRetweet','idioma','tema','categoría','polaridad','numero_Polaridad','busqueda','analisis'])
+
+    for tweet in tweets:
+        writer.writerow([tweet.fecha_creado, tweet.id_twitter, tweet.texto,tweet.truncado,tweet.geo,tweet.coordenadas,tweet.place,tweet.numero_ret,tweet.numero_fav,tweet.esFavorito,tweet.esRetweet,tweet.idioma,tweet.tema,tweet.categoría,tweet.polaridad,tweet.numero_Polaridad,tweet.busqueda,tweet.analisis])
+
+    return response
+
+@login_required()
+def csvdownall_View(request):
+
+    tweets = Tweet.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="tweets.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['fecha_creado','id_twitter','texto','truncado','geo','coordenadas','place','numero_ret','numero_fav','esFavorito','esRetweet','idioma','tema','categoría','polaridad','numero_Polaridad','busqueda','analisis'])
+
+    for tweet in tweets:
+        writer.writerow([tweet.fecha_creado, tweet.id_twitter, tweet.texto,tweet.truncado,tweet.geo,tweet.coordenadas,tweet.place,tweet.numero_ret,tweet.numero_fav,tweet.esFavorito,tweet.esRetweet,tweet.idioma,tweet.tema,tweet.categoría,tweet.polaridad,tweet.numero_Polaridad,tweet.busqueda,tweet.analisis])
+
+    return response
 
 ######################################
 # CLASES para las vistas sobre temas #

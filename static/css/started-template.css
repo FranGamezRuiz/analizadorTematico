@@ -19,6 +19,38 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7deed', endColorstr='#00acee', GradientType=0 );
 }
 
+/********************/
+/*  tweets view */
+/*********************/
+.tweet{
+  background-color: white;
+}
+.tweet:hover{
+  background-color: rgb(239, 243, 243);
+}
+.tweet .logoP{
+  width: 32px;
+  height: 32px;
+  background: url('../../static/images/Positivo.png');
+  background-size: 32px;
+}
+.tweet .logoN{
+  width: 32px;
+  height: 32px;
+  background: url('../../static/images/Negativo.png');
+  background-size: 32px;
+}
+.tweet .logoNeu{
+  width: 32px;
+  height: 32px;
+  background: url('../../static/images/Neutro.png');
+  background-size: 32px;
+}
+.tweet .idtweet {
+	width: 32px;
+	height: 32px;
+    margin-left: 2.5rem;
+}
 /**********************/
 /*      Formulario    */
 /**********************/
@@ -44,6 +76,12 @@ display: none;
 /*     Tema_list      */
 /**********************/
 .tema-foto{
+  background-image: url("../../static/images/fondoansen.png");
+  background-position: left;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.tweet-foto{
   background-image: url("../../static/images/fondoansen.png");
   background-position: left;
   background-repeat: no-repeat;

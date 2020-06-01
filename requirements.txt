@@ -9,3 +9,4 @@ tweepy==3.8.0
 textblob==0.15.3
 MeaningCloud-python==1.2.2
 Unidecode==1.1.1
+wordcloud==1.7.0

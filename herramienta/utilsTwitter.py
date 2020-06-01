@@ -2,17 +2,10 @@ import time
 import tweepy
 from tweepy import Stream, AppAuthHandler
 from tweepy.streaming import StreamListener
-from herramienta.keys import consumer_key, consumer_secret, access_key, access_secret, license_key_MC
+from herramienta.keys import consumer_key, consumer_secret, access_key, access_secret
 from herramienta.models import Tweet
-from textblob import TextBlob
-import meaningcloud
+from herramienta.utilsTexto import analisisMeaning, analisisText, formateoFecha, coincidenciaTexto, deEmojify, palabrasClave
 import json
-import re
-from unicodedata import normalize
-import unicodedata
-from unidecode import unidecode
-
-
 
 ###########################
 #   Variables gobales     #
@@ -43,168 +36,6 @@ def get_auth(tipo):
         auth = AppAuthHandler(consumer_key, consumer_secret)
     return auth
 
-
-##################################
-#      Análisis con TextBlob     #
-##################################
-def analisisText(full_text):
-    textoTextBlob = TextBlob(full_text)
-    try:
-        textoIngles = textoTextBlob.translate(to='en')
-    except:
-        textoIngles = textoTextBlob
-    print(textoIngles)
-    polarity = textoIngles.sentiment.polarity
-    if polarity < 0:
-        polaridad = "Negativo"
-    elif polarity == 0:
-        polaridad = "Neutro"
-    elif polarity > 0:
-        polaridad = "Positivo"
-
-    return (polaridad,polarity)
-
-##################################
-#     Análisis con MeaningCloud   #
-##################################
-def analisisMeaning(full_text):
-    analisis = meaningcloud.SentimentResponse(
-        meaningcloud.SentimentRequest(license_key_MC, lang='es', txt=full_text, txtf='plain').sendReq())
-
-    if analisis.getGlobalScoreTag() == 'N+':
-        polaridad = "Negativo"
-        polarity = -1
-    elif analisis.getGlobalScoreTag() == 'N':
-        polaridad = "Negativo"
-        polarity = -0.5
-    elif analisis.getGlobalScoreTag() == 'P':
-        polaridad = "Positivo"
-        polarity = 0.5
-    elif analisis.getGlobalScoreTag() == 'P+':
-        polaridad = "Positivo"
-        polarity = 1
-    else:
-        polaridad = "Neutro"
-        polarity = 0
-
-    return (polaridad,polarity)
-
-#############################
-#   Formatear la fecha tw   #
-#############################
-def formateoFecha(fecha):
-    fecha = str(fecha)
-    months = {'Jan':'01','Feb':'02', 'Mar':'03', 'Apr':'04','May':'05','June':'06','Jun':'06',
-              'July':'07','Jul':'07','Aug':'08','Sept':'09','Oct':'10','Nov':'11', 'Dec':'12'}
-    fecha = fecha.split()
-    fechaFormat = "{}-{}-{}".format(fecha[5], months[fecha[1]], fecha[2])
-
-    return fechaFormat
-
-##################################
-#     minuscula y sin tildes     #
-##################################
-def eliminarTildes(texto):
-    texto = str(texto).lower()
-    # -> NFD y eliminar diacríticos para las tildes
-    texto = re.sub(
-        r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1",
-        normalize("NFD", texto), 0, re.I
-    )
-    # -> NFC
-    texto = normalize('NFC', texto)
-    print("Sin tildes: ",format(texto))
-
-    return texto
-##############################################
-#   Quitar los emojis de los tweets          #
-##############################################
-def deEmojify(inputString):
-    returnString = ""
-    for character in inputString:
-        try:
-            character.encode("ascii")
-            returnString += character
-        except UnicodeEncodeError:
-            replaced = unidecode(str(character))
-            if replaced != '':
-                returnString += replaced
-            else:
-                try:
-                     returnString += "[" + unicodedata.name(character) + "]"
-                except ValueError:
-                     returnString += "[x]"
-
-    return returnString
-
-##############################################
-#     Buscar coincidencias palabras clave    #
-##############################################
-def findPalClave(array,texto):
-    palabraT = ''
-    palabras = []
-    posiciones = []
-    repetidos = []
-    for pa in array:
-        if pa != ' ':
-            palabraT += pa
-        else:
-            palabras.append(palabraT)
-            palabraT = ''
-    palabras.append(palabraT)
-    print(palabras)
-    for pal in palabras:
-        posiciones.append(texto.find(pal))
-    if -1 not in posiciones:
-        return 0
-    else:
-        for pos in posiciones:
-            if pos < 0:
-                repetidos.append(pos)
-        if len(posiciones) > len(repetidos):
-            return 0
-    return -1
-
-################################
-#     Buscar coincidencias     #
-################################
-def coincidenciaTexto(texto, categoria, tema, palClaveCate, palClaveTema):
-    '''
-    Como la búsqueda se realiza con un or en categoría y tema,
-    si no aparece la categoria o el tema no pertenece a la dicha, con lo
-    cual, se desecha el tweet.
-    Cuando se haga una busqueda general del tema, la categoria
-    se muestra con la palabra 'general' y no tiene porque aparecer
-    en el tweet.
-    :param texto: Texto del tweet
-    :param categoria: Categoria a la que pertenece
-    :return: categoria perteneciente
-    '''
-    print(texto)
-    texto = eliminarTildes(texto)
-    categoriaT = eliminarTildes(categoria)
-    temaT = eliminarTildes(tema)
-    claveCat = eliminarTildes(palClaveCate)
-    claveTem = eliminarTildes(palClaveTema)
-    print(texto)
-    print(categoriaT)
-    print(temaT)
-    if categoriaT != 'general':
-        posicionC = texto.find(categoria)
-        posicionCC = findPalClave(claveCat,texto) ##tengo que distinguir los espacios
-        if posicionC < 0 and posicionCC < 0:
-            categoria = 'general'
-    posicionT = texto.find(temaT)
-    posicionCT = findPalClave(claveTem,texto)
-    if posicionT < 0 and posicionCT < 0:
-        tema = 'no pertenece'
-
-
-    print('Encontradas: ')
-    print(categoria)
-    print(tema)
-    return (categoria,tema)
-
 #############################
 #     Procesar el tweet     #
 #############################
@@ -212,21 +43,26 @@ def procesarTweet(data,maquina,busqueda, tema, categoria, palClaveCate, palClave
     if busqueda == 'actual':
         try:
             full_text = data['retweeted_status']['extended_tweet']['full_text']
+            esRet = True
         except:  # No es un retweet
             if data['truncated'] == True:
                 full_text = data['extended_tweet']['full_text']
+                esRet = False
             else:
                 full_text = data['text']
+                esRet = False
     else:
         try:
             full_text = data['retweeted_status']['full_text']
+            esRet = True
         except:  # No es un retweet
             full_text = data['full_text']
+            esRet = False
 
     full_text = deEmojify(full_text)
     categoria, temaEncontrado = coincidenciaTexto(full_text, categoria, tema, palClaveCate, palClaveTema)
     tweetEncontrado = Tweet.objects.all()
-    encontrado = int(tweetEncontrado.filter(id_twitter=data['id']).count())
+    encontrado = int(tweetEncontrado.filter(id_twitter=data['id'], busqueda=busqueda).count())
 
     if temaEncontrado != 'no pertenece' and encontrado <= 0:
         if str(maquina) != 'TextBlob':
@@ -249,7 +85,6 @@ def procesarTweet(data,maquina,busqueda, tema, categoria, palClaveCate, palClave
         numero_ret =int(data['retweet_count'])
         numero_fav = int(data['favorite_count'])
         esFav = bool(data['favorited'])
-        esRet = bool(data['retweeted'])
         idioma = str(data['lang'])
         tweet = Tweet(fecha_creado=fecha_creado, id_twitter=id_twitter,texto=texto,truncado=truncado,geo=geo,coordenadas=coordenadas,place=place,numero_ret=numero_ret,numero_fav=numero_fav,esFavorito=esFav,esRetweet=esRet,idioma=idioma,tema=tema,categoría=categoria,polaridad=polaridad,numero_Polaridad=polarity,busqueda=busqueda,analisis=maquina)
         tweet.save()
@@ -265,8 +100,6 @@ class MyStreamListener(StreamListener):
     def on_data(self, raw_data):
         try:
             data = json.loads(raw_data)
-            print(data)
-            print("Uno")
             procesarTweet(data,'TextBlob','actual',tema_global, categoria_global, categoriaPal_global, temaPal_global)
             return True
         except BaseException as e:
@@ -428,30 +261,3 @@ def searchHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
         except tweepy.TweepError as e:
             print(e.reason)
             time.sleep(60 * 15) #Para los limites de la API
-
-
-
-################################
-#   Función palabras clave     #
-################################
-def palabrasClave(array):
-    '''
-    Introduce la cadena de char que contiene las palabras clave
-    y devuelve un string con las palabras clave y entre el espacio
-    un OR para realizar correctamente la búsqueda. Si la palabra
-    encontrada es general, es que la categoría es general y los
-    tweets no tienen porque contener la palabra 'general' para
-    mostrar una opinión general.
-    :param array: Cadena que contiene las palabras clave
-    :return: String de palabras clave
-    '''
-    palabraT = ''
-    for pa in array:
-        if pa != ' ':
-            palabraT += pa
-        else:
-            palabraT += ' OR '
-    if palabraT.lower() == 'general':
-        palabraT = ''
-
-    return palabraT
