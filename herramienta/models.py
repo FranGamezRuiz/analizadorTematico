@@ -2,7 +2,6 @@ from django.db import models
 
 from djongo import models #importo los modelos de django
 
-# Create your models here.
 
 class Categoria(models.Model):
     nombre = models.CharField('Nombre', max_length=50)
