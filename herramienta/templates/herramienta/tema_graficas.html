@@ -1,6 +1,7 @@
 
 {% extends 'base.html' %}
 
+{% block title %}<title>Analisis Tematico | Analizador - DashBoard {{ tema }}</title>{% endblock %}
 
 {% block content %}
 
@@ -8,21 +9,35 @@
     <!--Menu lateral-->
 
       <div class="row">
-        <nav class="col-md-2 d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-md-block {#bg-light#} sidebar" style="background-color: #004F6D;">
 
           <div  class="sidebar-sticky">
             <ul class="nav flex-column">
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>{{ tipo }}</span>
+                    <span><div class="btn-group">
+                            <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false" style="color: white!important;">
+                                {{ tipo }}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 2 %}">Actual</a>
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 1 %}" >Histórico</a>
+                                <a class="dropdown-item" type="button" href="{% url 'tema-grGeneral-view' tema.pk 3 %}" >Actual vs histórico</a>
+                            </div>
+                        </div></span>
                 </h6>
                 <li class="nav-item">
-                    <a class="nav-link d-flex" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
                 </li>
                 {% for categoria in categorias %}
                     <li class="nav-item">
-                        <a class="nav-link d-flex" href="{% url 'tema-graficas-view' tema.pk nTipo categoria%}">{{ categoria.nombre }}</a>
+                        <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-graficas-view' tema.pk nTipo categoria%}">{{ categoria.nombre }}</a>
                     </li>
                 {% endfor %}
+                <li class="nav-link">
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-detalle-view' tema.pk %}" > Volver al tema {{ tema }} </a>
+                </li>
             </ul>
           </div>
 
@@ -33,32 +48,156 @@
 
      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">{{ tema }} {{ titulo }}</h1>
-
+            <h1 class="h2" style="color: black;text-shadow: -1px 0 white, 0 1px white,1px 0 white, 0 -1px white;">{{ tema }} {{ titulo }}</h1>
+               <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tweets-view' tema.pk nTipo titulo %}" > Ver tweets </a>
           </div>
+        {% if tipo == 'Actual vs Histórico' %}
+            <div class="row">
+                    <div class="col-lg-auto">
+                        <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
+                            <p>Tweets:</p>
+                            <p> {{ nTweets }}</p>
+                        </div>
+                    </div>
 
-         <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+                    <div class="col">
+                        <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
+                            <p>Array con el valor Negativo, Positivo y Neutro</p>
+                            <p>Opiniones Actual: {{ dataAct }}</p>
+                            <p>Opiniones Historico: {{ dataHist }}</p>
+                        </div>
+                    </div>
+                </div>
+            <p class="text-justify">Obsérvese las graficas conseguidas a través de la recolección de los tweets sobre
+            el tema {{ tema }} y la categoría {{ titulo }}. Se observan dos gráficas de forma de tarta, una correspondiente
+            a los datos que se recolectan usando la búsqueda actual usando la función streaming() de la
+            API de Twitter y la siguiente representa a los recolectados con la búsqueda histórica
+            con la función search(). Para represetar el porcentaje de de cada una de ellas, se recoge el
+            total de tweets que representa el 100%, una vez hecho esto, se calcula el porcentaje
+            que representa a cada polaridad y así, tener una visión de cuál es la opinión que más
+            destaca sobre el tema. Si el número de porcentaje de positivo es mayor que los otros dos,
+                se puede concluir que el tema {{ tema }} y la categoría {{ titulo }} tiene una opinión general positiva</p>
+            <div class="row">
+                <div class="col">
+                <canvas class="my-4" id="myChart5" width="50" height="50" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                </div>
+            <div class="col">
+                <canvas class="my-4" id="myChart6" width="50" height="50" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+            </div>
+            </div>
 
+             <p class="text-justify">Esta gráfica permite la visualización de la evolución de la opinión que ha tenido el
+            tema {{ tema }} y la categoría {{ titulo }} a lo largo del tiempo de búsqueda que se ha realizado, se observan dos
+            líneas, una representando la búsqueda actual y otra la búsqueda histórica. Para realizar
+            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tweet
+            recolectado y se calcula una media aritmetica de los tweets que se publicaron el mismo día.
+            Así, se obtiene la evolución de la opinión. Esto sirve para conocer en que momento se aumentó
+            o disminuyó la positividad o negatividad de las opiniones y así poder conocer a que se debe. Si
+            en el tema {{ tema }} hubo una modificación de algo un día concreto, si la opinión positiva crece
+            a partir de ese día, se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea,
+            si es al contrario y se obtiene mayor número de tweets de polaridad negativa, se conoce la
+                 consecuencia directa de ese descontento.</p>
+
+            <canvas class="my-4" id="myChart7" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+        {% else %}
+            <div class="row">
+                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">Número de tweets: {{ nTweets }}</div></div>
+                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">
+                        Número de tweets analizados con TextBlob: {{ tweetsTextBlob }}</div></div>
+                {% if tipo != 'Actual' %}
+                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">
+                        Número de tweets analizados con MeaningCloud: {{ tweetsMeaning }}</div></div>
+                {% endif %}
+            </div>
+                <h6 style="margin-top: 1.5rem">Tweets con TextBlob</h6>
+            {% if tweetsTextBlob == 0 %}
+                Alguna imagen con pajaro con lupa para buscar
+            {% else %}
+                <div>
+
+                <p class="text-justify">Muestra de una gráfica de tipo PIE en el que se representa el porcentaje de la polaridad
+                de la opinión sobre el tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
+                analizador TextBlob. Para ello se recoge el número total de tweets que representa el 100% y una vez realizado esto,
+                se calcula el porcentaje para la polaridad negativa, positiva y neutra. Se puede observar cuál de las polaridades
+                tiene mayor representación en el total y así conocer la opinión general que se tiene del tema.</p>
+                    <canvas class="my-4" id="myChart" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                    <p class="text-justify">Esta gráfica permite la visualización de la evolución de la opinión que ha tenido el
+                        tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
+                        analizador TextBlob a lo largo del tiempo de búsqueda que se ha realizado, se observan una
+                        línea que es la que representa {{ titulo }}. Para realizar esta gráfica, se ha conseguido gracias a
+                        que se obtiene la fecha en la que se publicó el tweet recolectado y se calcula una media aritmetica
+                        de los tweets que se publicaron el mismo día. Así, se obtiene la evolución de la opinión.
+                        Esto sirve para conocer en que momento se aumentó o disminuyó la positividad o negatividad
+                        de las opiniones y así poder conocer a que se debe. Si en el tema {{ tema }} y la categoría {{ titulo }}
+                        hubo una modificación de algo un día concreto, si la opinión positiva crece a partir de ese día,
+                        se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea, si es al contrario
+                        y se obtiene mayor número de tweets de polaridad negativa, se conoce la consecuencia directa de ese descontento.</p>
+                    <canvas class="my-4" id="myChart2" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                </div>
+            {% endif %}
+            {% if tipo != 'Actual' %}
+                <h6 style="margin-top: 1.5rem">Tweets con MeaninCloud</h6>
+                {% if tweetsMeaning == 0 %}
+                    Alguna imagen con pajaro con lupa para buscar
+                {% else %}
+                    <div>
+                        <p class="text-justify">Muestra de una gráfica de tipo PIE en el que se representa el porcentaje de la polaridad
+                de la opinión sobre el tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
+                analizador MeaningCloud. Para ello se recoge el número total de tweets que representa el 100% y una vez realizado esto,
+                se calcula el porcentaje para la polaridad negativa, positiva y neutra. Se puede observar cuál de las polaridades
+                tiene mayor representación en el total y así conocer la opinión general que se tiene del tema.</p>
+                        <canvas class="my-4" id="myChart3" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                        <p class="text-justify">Esta gráfica permite la visualización de la evolución de la opinión que ha tenido el
+                        tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
+                        analizador MeaninCloud a lo largo del tiempo de búsqueda que se ha realizado, se observan una
+                        línea que es la que representa {{ titulo }}. Para realizar esta gráfica, se ha conseguido gracias a
+                        que se obtiene la fecha en la que se publicó el tweet recolectado y se calcula una media aritmetica
+                        de los tweets que se publicaron el mismo día. Así, se obtiene la evolución de la opinión.
+                        Esto sirve para conocer en que momento se aumentó o disminuyó la positividad o negatividad
+                        de las opiniones y así poder conocer a que se debe. Si en el tema {{ tema }} y la categoría {{ titulo }}
+                        hubo una modificación de algo un día concreto, si la opinión positiva crece a partir de ese día,
+                        se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea, si es al contrario
+                        y se obtiene mayor número de tweets de polaridad negativa, se conoce la consecuencia directa de ese descontento.</p>
+                        <canvas class="my-4" id="myChart4" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% if nTweets > 0 %}
+        <p class="text-justify">Una imagen representando las palabras que más se utilizan para mostrar
+        la opinión en los tweets. Se recogen todos los tweets que se han obtenido sobre el tema {{ tema }}
+        y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y se recogen sobre un texto completo, se eliminan
+        las palabras que no tienen relevancia, como determinantes, preposiciones o palabras con una longitud
+        menor de tres que no ofrecen caracterización relevante. Una vez obtenido las palabras importantes, se
+        obtiene la cantidad de veces de aparición y se representa en la imagen con un tamaño mayor si se ha
+        usado mucho esa palabra o, al contrario, un tamaño menor si se ha usado poco. Esto da una imagen generar sobre el
+        tema {{ tema }} y la categoría {{ titulo }} para saber cual es la primera imagen que se le viene al usuario
+        cuando piensa sobre esto.</p>
+        <img src="{{ image }}" width="1000" height="500">
+        {% endif %}
     </main>
+
       </div>
 
 
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        if ("{{ tipo }}" == 'Actual vs Histórico'){
+            //////Actual-Historico/////////////
+        var ctx = document.getElementById('myChart5').getContext('2d');
+        var myChart5 = new Chart(ctx, {
             type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
 
             data: {
                 labels: {{labels|safe}},
                 datasets: [{
-                    data: {{data|safe}},
+                    data: {{dataAct|safe}},
                     backgroundColor: {{colors|safe}}
                 }]
             },
             options: {
                 title: {
                     display: true,
-                    text: '{{ titulo }}',
+                    text: 'Porcentaje opiniones actual',
                 },
                 legend: {
                     disblay: true,
@@ -72,6 +211,161 @@
 
 
         });
+        var ctx = document.getElementById('myChart6').getContext('2d');
+        var myChart6 = new Chart(ctx, {
+            type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+
+            data: {
+                labels: {{labels|safe}},
+                datasets: [{
+                    data: {{dataHist|safe}},
+                    backgroundColor: {{colors|safe}}
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Porcentaje opiniones historico',
+                },
+                legend: {
+                    disblay: true,
+                    position: 'right',
+                    labels: {
+                        fontColor: '#000'
+                    }
+                }
+
+            }
+        });
+        var ctx = document.getElementById('myChart7').getContext('2d');
+            var myChart7 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ fechasAct|safe }},
+                    datasets: [{
+                        data: {{ valoresAct|safe }},
+                        label: 'Actual',
+                        borderColor: "#cd4ccb",
+                        fill: false
+                    },{
+                        data: {{ valoresHist|safe }} ,
+                        label: 'Historico',
+                        borderColor: "#ff8610",
+                        fill: false
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Evolución de la opinión por días'
+                    }
+                }
+            });
+
+
+        }else
+        {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+
+                data: {
+                    labels: {{labels|safe}},
+                    datasets: [{
+                        data: {{data|safe}},
+                        backgroundColor: {{colors|safe}}
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Porcentaje opiniones con TextBlob',
+                    },
+                    legend: {
+                        disblay: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: '#000'
+                        }
+                    }
+
+                }
+
+
+            });
+
+            var ctx = document.getElementById('myChart2').getContext('2d');
+            var myChart2 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ fechas|safe }},
+                    datasets: [{
+                        data: {{ valores|safe }},
+                        label: '{{ titulo }}',
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Evolución de la opinión por días TextBlob'
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('myChart3').getContext('2d');
+            var myChart3 = new Chart(ctx, {
+                type: 'pie',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+
+                data: {
+                    labels: {{labels2|safe}},
+                    datasets: [{
+                        data: {{data2|safe}},
+                        backgroundColor: {{colors2|safe}}
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Porcentaje opiniones con MeaningCloud',
+                    },
+                    legend: {
+                        disblay: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: '#000'
+                        }
+                    }
+
+                }
+
+
+            });
+
+            var ctx = document.getElementById('myChart4').getContext('2d');
+            var myChart4 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ fechas2|safe }},
+                    datasets: [{
+                        data: {{ valores2|safe }},
+                        label: '{{ titulo }}',
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Evolución de la opinión por días MeaningCloud'
+                    }
+                }
+            });
+        }
 
     </script>
 {% endblock %}

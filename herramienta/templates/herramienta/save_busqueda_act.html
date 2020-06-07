@@ -1,6 +1,8 @@
 
 {% extends 'base.html' %}
 
+{% block title %}<title>Analisis Tematico | Analizador - {{ tema }} {{ categoria }} Actual</title>{% endblock %}
+
 {% block content %}
     <div class="container">
     <p><h3>Guardada la búsqueda sobre:</h3></p>
@@ -22,21 +24,13 @@
         Configurando busqueda: Actual
     </h6>
     </p>
+
     <p>
     <h6>
-        Números de tweets a recolectar: {{ numTw }}
+        Fecha fin de la recolección: {{ fechaFin }}
     </h6>
     </p>
-    <p>
-    <h6>
-        Fecha fin de la recolección: {{ fecha }}
-    </h6>
-    </p>
-    <p>
-    <h6>
-        Tipo de análisis: {{ maquinaA }}
-    </h6>
-    </p>
+
 
     <p>Vuelva a la herramienta <a href="{% url 'tema-list-view' %}">analizador</a></p>
 

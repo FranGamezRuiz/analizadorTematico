@@ -2,7 +2,6 @@ from django.db import models
 
 from djongo import models #importo los modelos de django
 
-# Create your models here.
 
 class Categoria(models.Model):
     nombre = models.CharField('Nombre', max_length=50)
@@ -37,11 +36,11 @@ class Tweet(models.Model):
     id_twitter = models.CharField('id en twitter', max_length=100)
     texto = models.CharField('Texto del tweet', max_length=300)
     truncado = models.BooleanField('¿ es truncado ?', default=False)
-    geo = models.DecimalField('Geolocalización',blank=True, null=True, max_digits=10, decimal_places=5)
-    coordenadas = models.DecimalField('coordenadas',blank=True, null=True,max_digits=10, decimal_places=5)
-    place = models.DecimalField('Lugar',blank=True, null=True,max_digits=10, decimal_places=5)
+    geo = models.CharField('Geolocalización',blank=True, null=True, max_length=300)
+    coordenadas = models.CharField('Coordenadas',blank=True, null=True, max_length=300)
+    place = models.CharField('Lugar',blank=True, null=True,max_length=300)
     numero_ret = models.IntegerField('Número de retweet', default=0)
-    numero_fav = models.IntegerField('Número de retweet', default=0)
+    numero_fav = models.IntegerField('Número de favoritos', default=0)
     esFavorito = models.BooleanField('¿ es favorito?', default=False)
     esRetweet = models.BooleanField('¿ es favorito?', default=False)
     idioma = models.CharField('Idioma', max_length=3)
@@ -55,6 +54,7 @@ class Tweet(models.Model):
     class Meta:
         verbose_name = "Tweet"
         verbose_name_plural = "Tweets"
+        ordering = ['id']
 
     def __str__(self):
         return self.texto

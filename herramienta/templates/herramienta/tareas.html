@@ -2,10 +2,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}<title>Analisis Tematico | Tareas</title>{% endblock %}
+
 {% block content %}
      <div class="container">
         <div class="row">
-            <div class="col">
+            <div>
                 <p>Procesos no invocados</p>
                 <table class="table table-striped">
                     <thead>
@@ -29,7 +31,7 @@
                 </table>
 
             </div>
-            <div class="col">
+            <div>
                 <p>Procesos invocados</p>
                 <table class="table table-striped">
                     <thead>
@@ -52,7 +54,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col">
+            <div>
                 <p>Procesos Terminados</p>
                 <table class="table table-striped">
                     <thead>

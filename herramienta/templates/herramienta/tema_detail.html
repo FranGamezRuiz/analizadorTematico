@@ -1,23 +1,22 @@
 {% extends 'base.html' %}
 
+{% block title %}<title>Analisis Tematico | Analizador - {{ tema }}</title>{% endblock %}
 
 {% block content %}
 
 
 
     <div class="container">
-        <h4>
+        <h1>
             TEMA: {{ tema }}
-        </h4>
-        <table class="table table-borderless">
-            <tbody>
-            <tr>
-                <td width="400" height="250">
-                    <h5>
-                        Categorias
-                    </h5>
-                    <div class="list-group">
+        </h1>
 
+        <div class="row" style="padding: 5rem 1.5rem;">
+            <div class="col">
+                <div class="list-group">
+                        <h5>
+                        Categorias:
+                        </h5>
                         {% comment %}
                         Esta es una lista de los temas que hay en la base de datos
                         {% endcomment %}
@@ -29,64 +28,49 @@
                         {% endfor %}
 
                     </div>
-                </td>
-                <td width="400" height="250">
-
-                    <h5>¿Qué es una categoría?</h5>
-                    <p class="text-justify">Una cartegoría permite al usuario diferenciar y caracterizar la búsqueda interna
-                        de cada tema que el usuario ha seleccionado anteriormente. Puede realizar un análisis
-                        por separado de cada una de ellas o una vez hecho de cada una por separado tener un análisis en común.</p>
-                    <p class="text-justify">
-                        Para modificar o actualizar el tema {{ tema }}.
-
-                        Puede añadir nuevas categorías mientras este editando el tema.
-                    </p>
-                    <p>
-
-                        <h6>
+            </div>
+            <div class="col">
+                    <h5>Modificar</h5>
+                    <p class="text-justify">En esta opción permite la modificación de las palabras clave del tema {{ tema }} para realizar
+                    una búsqueda más exhaustiva. También permite añadir nuevas categorías. Si se desea buscar opiniones
+                    generales del tema, sin querer caracterizar la búsqueda dentro de una categoría, use la palabra clave
+                    "GENERAL".</p>
+                    <h6>
                             <a href="{% url 'tema-edit-view' tema.pk %}" class="list-group-item list-group-item-action">
                                 Editar {{ tema }}</a>
-                        </h6>
-
-                    </p>
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-
-        <div class="row">
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Actual</h5>
-                            <p class="card-text">Permite la visualización de las estadísticas referentes a la búsqueda del tipo actual.</p>
-                            <a href="{% url 'tema-grGeneral-view' tema.pk 2 %}"class="list-group-item list-group-item-action"> Actual </a>
-                        </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Histórico</h5>
-                            <p class="card-text">Permite la visualización de las estadísticas referentes a la búsqueda del tipo histórico.</p>
-                            <a href="{% url 'tema-grGeneral-view' tema.pk 1 %}"class="list-group-item list-group-item-action"> Histórico </a>
-                        </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Actual e Histórico</h5>
-                            <p class="card-text">Permite visualizar la comparación de las estadísticas historicas frente a las actuales.</p>
-                            <a href="{% url 'tema-grGeneral-view' tema.pk 3 %}"class="list-group-item list-group-item-action"> Actual vs Histórico </a>
-                        </div>
-                </div>
+                    </h6>
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="temadetail-foto">
+            <div class="maintexto">
+                <h1>Pero,</h1>
+                <h1>¿Qué es una Categoría?</h1>
+            </div>
+        </div>
+        <p class="text-justify" style="padding: 5rem 1.5rem;">Una cartegoría permite al usuario diferenciar y caracterizar la búsqueda interna
+                        de cada tema que el usuario ha seleccionado anteriormente. Puede realizar un análisis
+                        por separado de cada una de ellas o una vez hecho de cada una por separado tener un análisis en común. Para ello,
+                        es necesario ir al apartado de DashBoard.
+        </p>
 
+    </div>
+
+    <div class="container">
+        <div class="temadash-foto">
+            <div class="maintexto">
+                <h1>DashBoard</h1>
+            </div>
+        </div>
+        <p class="text-justify" style="padding: 5rem 1.5rem;">A través de este apartado, se puede visualizar los datos que se han recolectado sobre
+            el tema {{ tema }}, se puede observar cada opinión de las categorías que se han creado seleccionandolas dentro del dashboard. Otra
+            opción que permite, es la visualización de los datos dependiendo de la búsqueda realizada, seleccionando "actual", "histórica" o "actual vs
+            histórica"
+        </p>
+        <a href="{% url 'tema-grGeneral-view' tema.pk 2 %}"class="list-group-item list-group-item-action"> Visualizar </a>
+
+    </div>
 
 
 {% endblock %}

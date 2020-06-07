@@ -2,6 +2,8 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block title %}<title>Analisis Tematico | Analizador - {{ tema }} {{ categoria }} {{ tipo }}</title>{% endblock %}
+
 {% block content %}
     <div class="container">
     <p>
@@ -22,18 +24,21 @@
 
     <form id="formConfig" method="post">
         {% csrf_token %}
-        {{ formulario.numeroTweets|as_crispy_field }}
         {% if tipo == 'historico' %}
+
+            {{ formulario.numeroTweets|as_crispy_field }}
+
             <p>Introducir las fechas de inicio y fin de recolección</p>
 
             {{ formulario.fechaInicio|as_crispy_field }}
 
             {{ formulario.fechaFin|as_crispy_field }}
+            {{ formulario.maquinaAnalisis|as_crispy_field }}
+
         {% elif tipo == 'actual' %}
             <p>La fecha a introducir indica hasta que fecha recolectar</p>
             {{ formulario.fechaFin|as_crispy_field }}
         {% endif %}
-        {{ formulario.maquinaAnalisis|as_crispy_field }}
         <button type="submit" class="btn btn-primary">Guardar</button>
 
     </form>
