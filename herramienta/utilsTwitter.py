@@ -6,7 +6,7 @@ from herramienta.keys import consumer_key, consumer_secret, access_key, access_s
 from herramienta.models import Tweet
 from herramienta.utilsTexto import analisisMeaning, analisisText, formateoFecha, coincidenciaTexto, deEmojify, palabrasClave
 import json
-
+import datetime
 ###########################
 #   Variables gobales     #
 ###########################
@@ -14,7 +14,8 @@ tema_global = ''
 temaPal_global = ''
 categoria_global = ''
 categoriaPal_global = ''
-def modificarGlobal(nombreTema, nombreCate, palClaveTema, palClaveCate):
+fechaFin_global = ''
+def modificarGlobal(nombreTema, nombreCate, palClaveTema, palClaveCate, fechaFin):
     global tema_global
     tema_global = nombreTema
     global categoria_global
@@ -23,6 +24,8 @@ def modificarGlobal(nombreTema, nombreCate, palClaveTema, palClaveCate):
     temaPal_global = palClaveTema
     global categoriaPal_global
     categoriaPal_global = palClaveCate
+    global fechaFin_global
+    fechaFin_global = fechaFin
 
 
 ###########################
@@ -62,7 +65,7 @@ def procesarTweet(data,maquina,busqueda, tema, categoria, palClaveCate, palClave
     full_text = deEmojify(full_text)
     categoria, temaEncontrado = coincidenciaTexto(full_text, categoria, tema, palClaveCate, palClaveTema)
     tweetEncontrado = Tweet.objects.all()
-    encontrado = int(tweetEncontrado.filter(id_twitter=data['id'], busqueda=busqueda).count())
+    encontrado = tweetEncontrado.filter(id_twitter=data['id'], busqueda=busqueda, analisis=maquina).count()
 
     if temaEncontrado != 'no pertenece' and encontrado <= 0:
         if str(maquina) != 'TextBlob':
@@ -99,9 +102,14 @@ def procesarTweet(data,maquina,busqueda, tema, categoria, palClaveCate, palClave
 class MyStreamListener(StreamListener):
     def on_data(self, raw_data):
         try:
-            data = json.loads(raw_data)
-            procesarTweet(data,'TextBlob','actual',tema_global, categoria_global, categoriaPal_global, temaPal_global)
-            return True
+            fechaHoy = datetime.date.today()
+            fechaHoy = fechaHoy.strftime("%Y-%m-%d")
+            if fechaHoy > fechaFin_global:
+                return False
+            else:
+                data = json.loads(raw_data)
+                procesarTweet(data,'TextBlob','actual',tema_global, categoria_global, categoriaPal_global, temaPal_global)
+                return True
         except BaseException as e:
             print("Error en el dato: %s",format(str(e)))
         return True #True para que siga recolectando
@@ -127,7 +135,7 @@ class MyStreamListener(StreamListener):
 ###############################
 #   Función streamListener    #
 ###############################
-def stream(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC):
+def stream(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, fechaFin):
     modificarGlobal(nombreTema, nombreCate, palabrasClaveT, palabrasClaveC)
     auth = get_auth('stream')
     twitter_stream = Stream(auth, MyStreamListener())
@@ -192,6 +200,7 @@ def cursorHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
                 contTweet += 1
                 tweJason = tweet._json
                 max_id = tweJason['id']
+                print(maquina)
                 procesarTweet(tweJason, str(maquina), 'historica', nombreTema, nombreCate, palabrasClaveC,palabrasClaveT)
 
         except tweepy.TweepError as e:

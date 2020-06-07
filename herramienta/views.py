@@ -608,7 +608,7 @@ def tweetCate_View(request, pk,  tipo, cate):
 
     paginator = Paginator(tweets, 10)
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    tweets = paginator.get_page(page_number)
 
 
     context = {
@@ -618,7 +618,7 @@ def tweetCate_View(request, pk,  tipo, cate):
         'nTipo':nTipo,
         'titulo':cate,
         'tweets':tweets,
-        'page_obj': page_obj
+        'page_obj': tweets
     }
     return render(request, "herramienta/tweets_view.html", context)
 
@@ -705,7 +705,7 @@ class TemaCreateView(LoginRequiredMixin, CreateView):
 class TemaUpdateView(LoginRequiredMixin, UpdateView):
     model = Tema
     form_class = TemaUpdateForm
-    template_name_suffix = '_update_form'
+    template_name = 'herramienta/tema_update_form.html'
     #Hay que editar el success_url para obtener la clave del objeto
     def get_success_url(self):
         return reverse_lazy('tema-detalle-view', kwargs={'pk':self.object.id})

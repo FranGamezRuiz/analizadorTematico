@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from herramienta.views import TemaListView, TemaDetailView, sobreMi_view, inicio_view, TemaUpdateView, TemaCreateView, \
-    categoriaDetail_View, temaGrGeneral_View, temaGraficas_View, saveBusqHist_View,  saveBusqAct_View, \
+    categoriaDetail_View, temaGrGeneral_View, temaGraficas_View, saveBusqHist_View, saveBusqAct_View, \
     confiBusqueda_View, tareas_view, tweetCate_View, csvdownload_View, csvdownall_View
 
 urlpatterns = [

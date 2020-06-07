@@ -20,12 +20,13 @@ class CateForm(forms.ModelForm):
 ###############################
 #   Formulario Creando Temas  #
 ###############################
+
+
 class TemaForm(forms.ModelForm):
 
     class Meta:
         model=Tema
         fields = ['nombre', 'palabras_clave', 'categorias']
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
@@ -36,14 +37,10 @@ class TemaForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit-name','Enviar'))
 
-
 ###############################
 #   Formulario Creando Temas  #
 ###############################
 class TemaUpdateForm(forms.ModelForm):
-    # class Meta:
-    #     model=Tema
-    #     fields = ['nombre', 'palabras_clave', 'categorias']
 
     class Meta:
         model=Tema
@@ -58,6 +55,7 @@ class TemaUpdateForm(forms.ModelForm):
         self.helper.form_class = "tema-update-form" #clase para el css
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit-name','Enviar'))
+
 
 ##########################
 #   Formulario Historico

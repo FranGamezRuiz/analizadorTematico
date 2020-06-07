@@ -37,7 +37,7 @@ def analisisText(full_text):
         textoIngles = textoTextBlob.translate(to='en')
     except:
         textoIngles = textoTextBlob
-    print(textoIngles)
+
     polarity = textoIngles.sentiment.polarity
     if polarity < 0:
         polaridad = "Negativo"
@@ -99,7 +99,7 @@ def eliminarTildes(texto):
     )
     # -> NFC
     texto = normalize('NFC', texto)
-    print("Sin tildes: ",format(texto))
+
 
     return texto
 
@@ -118,7 +118,7 @@ def findPalClave(array,texto):
             palabras.append(palabraT)
             palabraT = ''
     palabras.append(palabraT)
-    print(palabras)
+
     for pal in palabras:
         posiciones.append(texto.find(pal))
     if -1 not in posiciones:
@@ -146,15 +146,13 @@ def coincidenciaTexto(texto, categoria, tema, palClaveCate, palClaveTema):
     :param categoria: Categoria a la que pertenece
     :return: categoria perteneciente
     '''
-    print(texto)
+
     texto = eliminarTildes(texto)
     categoriaT = eliminarTildes(categoria)
     temaT = eliminarTildes(tema)
     claveCat = eliminarTildes(palClaveCate)
     claveTem = eliminarTildes(palClaveTema)
-    print(texto)
-    print(categoriaT)
-    print(temaT)
+
     if categoriaT != 'general':
         posicionC = texto.find(categoria)
         posicionCC = findPalClave(claveCat,texto) ##tengo que distinguir los espacios
