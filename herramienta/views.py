@@ -308,25 +308,40 @@ def temaGraficas_View(request, pk, tipo, cate):
     allTweets = Tweet.objects.all()  # Obtengo Todos los tweets
 
     cate = str(cate)
-    if cate != '1':
+    nTipo = int(tipo)
+    if cate != 'general':
         #Buscar la categoría
         for categoria in categorias:
             if categoria.nombre == cate:
                 cate = categoria.nombre
-    nTipo = int(tipo)
-    if nTipo == 1:
-        tipo = 'historica'
-        tipoH = 'Histórico'
-        tweets = allTweets.filter(categoría=cate, tema=nombreTema, busqueda=tipo)
-    elif nTipo == 2:
-        tipo = 'actual'
-        tipoH = 'Actual'
-        tweets = allTweets.filter(categoría=cate, tema=nombreTema, busqueda=tipo)
+        if nTipo == 1:
+            tipo = 'historica'
+            tipoH = 'Histórico'
+            tweets = allTweets.filter(categoría=cate, tema=nombreTema, busqueda=tipo)
+        elif nTipo == 2:
+            tipo = 'actual'
+            tipoH = 'Actual'
+            tweets = allTweets.filter(categoría=cate, tema=nombreTema, busqueda=tipo)
+        else:
+            tipoH = 'Actual vs Histórico'
+            tweets = allTweets.filter(categoría=cate, tema=nombreTema)
+            tweetsH = allTweets.filter(categoría=cate, tema=nombreTema, busqueda='historica')
+            tweetsA = allTweets.filter(categoría=cate, tema=nombreTema, busqueda='actual')
+
     else:
-        tipoH = 'Actual vs Histórico'
-        tweets = allTweets.filter(categoría=cate, tema=nombreTema)
-        tweetsH = allTweets.filter(categoría=cate, tema=nombreTema,busqueda='historica')
-        tweetsA = allTweets.filter(categoría=cate, tema=nombreTema,busqueda='actual')
+        if nTipo == 1:
+            tipo = 'historica'
+            tipoH = 'Histórico'
+            tweets = allTweets.filter(tema=nombreTema, busqueda=tipo)
+        elif nTipo == 2:
+            tipo = 'actual'
+            tipoH = 'Actual'
+            tweets = allTweets.filter(tema=nombreTema, busqueda=tipo)
+        else:
+            tipoH = 'Actual vs Histórico'
+            tweets = allTweets.filter(tema=nombreTema)
+            tweetsH = allTweets.filter(tema=nombreTema,busqueda='historica')
+            tweetsA = allTweets.filter(tema=nombreTema,busqueda='actual')
 
     #########
 
@@ -507,13 +522,14 @@ def temaGrGeneral_View(request, pk, tipo):
             fechas = []
     else:
         for categoria in categorias:
-            nombreCategorias.append(categoria.nombre)
-            objTweet = Tweet.objects.all()
-            tweetTema = objTweet.filter(tema=nombreTema, busqueda=tipo, categoría=categoria)
-            numeroTotal = tweetTema.count()
-            tweetPos = tweetTema.filter(polaridad='Positivo').count()
-            tweetNeg = tweetTema.filter(polaridad='Negativo').count()
-            tweetNeu = tweetTema.filter(polaridad='Neutro').count()
+            if categoria.nombre != 'general':
+                nombreCategorias.append(categoria.nombre)
+                objTweet = Tweet.objects.all()
+                tweetTema = objTweet.filter(tema=nombreTema, busqueda=tipo, categoría=categoria)
+                numeroTotal = tweetTema.count()
+                tweetPos = tweetTema.filter(polaridad='Positivo').count()
+                tweetNeg = tweetTema.filter(polaridad='Negativo').count()
+                tweetNeu = tweetTema.filter(polaridad='Neutro').count()
             try:
                 listaFecha, listaValor, fechasT = evolucionDia(tweetTema)
                 fechas += ponerFechas(listaFecha, fechas)
@@ -588,20 +604,20 @@ def tweetCate_View(request, pk,  tipo, cate):
     if nTipo == 1:
         tipo = 'historica'
         tipoH = 'Histórico'
-        if cate == 'General':
+        if cate == 'General' or cate == 'general':
             tweets = tweets.filter(tema=nombreTema, busqueda=tipo)
         else:
             tweets = tweets.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
     elif nTipo == 2:
         tipo = 'actual'
         tipoH = 'Actual'
-        if cate == 'General':
+        if cate == 'General' or cate == 'general':
             tweets = tweets.filter(tema=nombreTema, busqueda=tipo)
         else:
             tweets = tweets.filter(tema=nombreTema, categoría=cate, busqueda=tipo)
     else:
         tipoH = 'Actual vs Histórico'
-        if cate == 'General':
+        if cate == 'General' or cate == 'general':
             tweets = tweets.filter(tema=nombreTema)
         else:
             tweets = tweets.filter(tema=nombreTema, categoría=cate)

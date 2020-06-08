@@ -28,12 +28,17 @@
                         </div></span>
                 </h6>
                 <li class="nav-item">
-                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">Comparativa</a>
                 </li>
+                 <li class="nav-item">
+                        <a style="color: white!important;" class="nav-link d-flex" href="{% url 'tema-graficas-view' tema.pk nTipo "general"%}">General</a>
+                 </li>
                 {% for categoria in categorias %}
+                    {% if categoria.nombre != 'general' %}
                     <li class="nav-item">
                         <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-graficas-view' tema.pk nTipo categoria%}">{{ categoria.nombre }}</a>
                     </li>
+                    {% endif %}
                 {% endfor %}
                 <li class="nav-link">
                     <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-detalle-view' tema.pk %}" > Volver al tema {{ tema }} </a>

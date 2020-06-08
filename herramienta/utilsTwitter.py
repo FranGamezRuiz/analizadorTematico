@@ -104,12 +104,13 @@ class MyStreamListener(StreamListener):
         try:
             fechaHoy = datetime.date.today()
             fechaHoy = fechaHoy.strftime("%Y-%m-%d")
-            if fechaHoy > fechaFin_global:
+            print(format(fechaHoy), " hasta ", format(fechaFin_global))
+            if fechaHoy >= fechaFin_global:
                 return False
-            else:
-                data = json.loads(raw_data)
-                procesarTweet(data,'TextBlob','actual',tema_global, categoria_global, categoriaPal_global, temaPal_global)
-                return True
+
+            data = json.loads(raw_data)
+            procesarTweet(data,'TextBlob','actual',tema_global, categoria_global, categoriaPal_global, temaPal_global)
+            return True
         except BaseException as e:
             print("Error en el dato: %s",format(str(e)))
         return True #True para que siga recolectando
@@ -136,7 +137,7 @@ class MyStreamListener(StreamListener):
 #   Función streamListener    #
 ###############################
 def stream(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, fechaFin):
-    modificarGlobal(nombreTema, nombreCate, palabrasClaveT, palabrasClaveC)
+    modificarGlobal(nombreTema, nombreCate, palabrasClaveT, palabrasClaveC, fechaFin)
     auth = get_auth('stream')
     twitter_stream = Stream(auth, MyStreamListener())
     palabra = []
