@@ -65,8 +65,8 @@ display: none;
 /**********************/
 /*     Cate_Detail      */
 /**********************/
-.catedetail-foto{
-  background-image: url("../../static/images/fondoansen.png");
+.catebusquedadetail-foto{
+  background-image: url("../../static/images/fondobusquedatipo.png");
   background-position: left;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -76,13 +76,13 @@ display: none;
 /*     Tema_list      */
 /**********************/
 .tema-foto{
-  background-image: url("../../static/images/fondoansen.png");
+  background-image: url("../../static/images/fondoqueestema.png");
   background-position: left;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 .tweet-foto{
-  background-image: url("../../static/images/fondoansen.png");
+  background-image: url("../../static/images/fondoobjetotweet.png");
   background-position: left;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -90,21 +90,22 @@ display: none;
 
 
 /**********************/
-/*     Tema_Detail      */
+/*     Tema_Detail    */
 /**********************/
-.temadetail-foto{
-  background-image: url("../../static/images/fondoansen.png");
+.categoriadetail-foto{
+  background-image: url("../../static/images/fondoqueescate.png");
   background-position: left;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
 
 
 /***************************/
 /*     Tema_DashBoard      */
 /***************************/
 .temadash-foto{
-  background-image: url("../../static/images/fondoansen.png");
+  background-image: url("../../static/images/fondoDashboard.png");
   background-position: left;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -128,7 +129,7 @@ display: none;
   box-shadow: 0 5px 15px rgba(0,0,0,.5);
 }
 .twitter-foto{
-  background-image: url("../../static/images/LogoPaginaSinFondo.png");
+  background-image: url("../../static/images/fondoPorqueTwitter.png");
   background-position: left;
   background-repeat: no-repeat;
   background-attachment: fixed;

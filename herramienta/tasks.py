@@ -25,8 +25,9 @@ def historico(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, ma
 #########################
 @background(schedule=5)
 def actual(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , fechaFin):
-    print('entro a buscar ',format(nombreTema))
-    print('con la categoria ',format(nombreCate))
+    print('Entro a buscar ',format(nombreTema))
+    print('Con la categoria ',format(nombreCate))
+    print('Fecha Fin ',format(fechaFin))
     stream(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, fechaFin)
     print('Termina el proceso')
 

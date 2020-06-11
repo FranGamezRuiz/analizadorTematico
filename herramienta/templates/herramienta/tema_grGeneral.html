@@ -26,13 +26,18 @@
                         </div></span>
                     </h6>
                     <li class="nav-item">
-                        <a style="color: white!important;" class="nav-link d-flex" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
+                        <a style="color: white!important;" class="nav-link d-flex" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">Comparativa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="color: white!important;" class="nav-link d-flex" href="{% url 'tema-graficas-view' tema.pk nTipo "general"%}">General</a>
                     </li>
                     {% for categoria in categorias %}
+                        {% if categoria.nombre != 'general' %}
                         <li class="nav-item">
                             <a class="nav-link d-flex" style="color: white!important;"
                                href="{% url 'tema-graficas-view' tema.pk nTipo categoria %}">{{ categoria.nombre }}</a>
                         </li>
+                        {% endif %}
                     {% endfor %}
                     <li class="nav-link">
                         <a style="color: white!important;" class="nav-link d-flex" href="{% url 'tema-detalle-view' tema.pk %}" >Volver al tema {{ tema }} </a>
@@ -48,7 +53,7 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2" style="color: black;text-shadow: -1px 0 white, 0 1px white,1px 0 white, 0 -1px white;">{{ tema }} General</h1>
+                <h1 class="h2" style="color: black;text-shadow: -1px 0 white, 0 1px white,1px 0 white, 0 -1px white;">{{ tema }} Comparativa de Categorías</h1>
                 <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tweets-view' tema.pk nTipo 'General' %}" > Ver tweets </a>
             </div>
             {% if tipo == 'Actual vs Histórico' %}
@@ -271,14 +276,17 @@
                 var solT = []
 
                 for (let i in diccionario) {
-                    solT = {
-                        data: diccionario[i],
-                        label: i,
-                        borderColor: getRandomColor(),
-                        fill: false
+                    if(i != "general") {
+                        solT = {
+                            data: diccionario[i],
+                            label: i,
+                            borderColor: getRandomColor(),
+                            fill: false
+                        }
+                        sol.push(solT)
                     }
                     console.log(solT)
-                    sol.push(solT)
+
                 }
                 console.log(sol)
                 return sol

@@ -28,12 +28,17 @@
                         </div></span>
                 </h6>
                 <li class="nav-item">
-                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">General</a>
+                    <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-grGeneral-view' tema.pk nTipo %}">Comparativa</a>
                 </li>
+                 <li class="nav-item">
+                        <a style="color: white!important;" class="nav-link d-flex" href="{% url 'tema-graficas-view' tema.pk nTipo "general"%}">General</a>
+                 </li>
                 {% for categoria in categorias %}
+                    {% if categoria.nombre != 'general' %}
                     <li class="nav-item">
                         <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-graficas-view' tema.pk nTipo categoria%}">{{ categoria.nombre }}</a>
                     </li>
+                    {% endif %}
                 {% endfor %}
                 <li class="nav-link">
                     <a class="nav-link d-flex" style="color: white!important;" href="{% url 'tema-detalle-view' tema.pk %}" > Volver al tema {{ tema }} </a>
@@ -111,7 +116,7 @@
             </div>
                 <h6 style="margin-top: 1.5rem">Tweets con TextBlob</h6>
             {% if tweetsTextBlob == 0 %}
-                Alguna imagen con pajaro con lupa para buscar
+                <img src="{{ STATIC_URL }}/static/images/buscar-dashboard.png" width="1000" height="500"  >
             {% else %}
                 <div>
 
@@ -136,9 +141,9 @@
                 </div>
             {% endif %}
             {% if tipo != 'Actual' %}
-                <h6 style="margin-top: 1.5rem">Tweets con MeaninCloud</h6>
+                <h6 style="margin-top: 1.5rem">Tweets con MeaningCloud</h6>
                 {% if tweetsMeaning == 0 %}
-                    Alguna imagen con pajaro con lupa para buscar
+                    <img src="{{ STATIC_URL }}/static/images/buscar-dashboard.png" width="1000" height="500"  >
                 {% else %}
                     <div>
                         <p class="text-justify">Muestra de una gráfica de tipo PIE en el que se representa el porcentaje de la polaridad
