@@ -6,80 +6,62 @@
 
 {% block content %}
      <div class="container">
-        <div class="row">
+
             <div>
-                <p>Procesos no invocados</p>
+                <h3>Procesos no invocados</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Parámetros</th>
-                            <th scope="col">Hasta</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for tarea in tareas %}
-                        <tr>
-                            <th scope="row">{{ tarea.pk }}</th>
-                            <td>{{ tarea.task_name }}</td>
-                            <td>{{ tarea.params }}</td>
-                            <td>{{ tarea.repeat_until.date }}</td>
-                        </tr>
+                            {% if completa.task_name == 'herramienta.tasks.actual' %}
+                                <tr>
+                                    <td>Tarea búsqueda Actual</td>
+                                    <td>{{ completa.task_params }}</td>
+                                </tr>
+                            {% elif completa.task_name == 'herramienta.tasks.historico' %}
+                                <tr>
+                                    <td>Tarea búsqueda Histórica</td>
+                                    <td>{{ completa.task_params }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
 
             </div>
             <div>
-                <p>Procesos invocados</p>
+                <h3>Procesos Terminados</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Parámetros</th>
-                            <th scope="col">Hasta</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for completa in completas %}
-                        <tr>
-                            <th scope="row">{{ completa.pk }}</th>
-                            <td>{{ completa.task_name }}</td>
-                            <td>{{ completa.task_params }}</td>
-                            <td>{{ completa.repeat_until.date }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div>
-                <p>Procesos Terminados</p>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Parámetros</th>
-                            <th scope="col">Hasta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for completa in completas %}
-                            {% if completa.repeat_until.date <= fechaHoy %}
-                        <tr>
-                            <th scope="row">{{ completa.pk }}</th>
-                            <td>{{ completa.task_name }}</td>
-                            <td>{{ completa.task_params }}</td>
-                            <td>{{ completa.repeat_until.date }}</td>
-                        </tr>
+                            {% if completa.task_name == 'herramienta.tasks.actual' %}
+                                <tr>
+                                    <td>Tarea búsqueda Actual</td>
+                                    <td>{{ completa.task_params }}</td>
+                                </tr>
+                            {% elif completa.task_name == 'herramienta.tasks.historico' %}
+                                <tr>
+                                    <td>Tarea búsqueda Histórica</td>
+                                    <td>{{ completa.task_params }}</td>
+                                </tr>
                             {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-        </div>
+
+
      </div>
 {% endblock %}
 

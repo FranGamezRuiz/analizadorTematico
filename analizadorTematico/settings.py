@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -137,6 +138,7 @@ STATIC_ROOT = ''
 
 STATICFILES_DIRS = (
     'static',
+
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
