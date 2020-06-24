@@ -28,7 +28,7 @@
 
             {{ formulario.numeroTweets|as_crispy_field }}
 
-            <p>Introducir las fechas de inicio y fin de recolección</p>
+            <p>Introducir las fechas de inicio y fin de recopilación</p>
 
             {{ formulario.fechaInicio|as_crispy_field }}
 
@@ -36,7 +36,7 @@
             {{ formulario.maquinaAnalisis|as_crispy_field }}
 
         {% elif tipo == 'actual' %}
-            <p>La fecha a introducir indica hasta que fecha recolectar</p>
+            <p>La fecha a introducir indica hasta que fecha recopilar</p>
             {{ formulario.fechaFin|as_crispy_field }}
         {% endif %}
         <button type="submit" class="btn btn-primary">Guardar</button>

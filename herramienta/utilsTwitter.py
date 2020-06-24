@@ -271,3 +271,5 @@ def searchHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
         except tweepy.TweepError as e:
             print(e.reason)
             time.sleep(60 * 15) #Para los limites de la API
+    print('Entre ', format(fechaInic), ' y ', format(fechaFin), ' se han encontrado ', format(contTweets), ' de ',
+          format(numTw))

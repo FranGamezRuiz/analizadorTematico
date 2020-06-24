@@ -62,14 +62,14 @@ class TemaUpdateForm(forms.ModelForm):
 ##########################
 
 class HistoricoForm(forms.Form):
-    numeroTweets = forms.IntegerField(label="Número de tweets a recolectar",widget=forms.TextInput( attrs= {
+    numeroTweets = forms.IntegerField(label="Número de tuits a recopilar",widget=forms.TextInput( attrs= {
                     'placeholder':"Numero de tweets: 1, 2, 3 ...",
                 }))
     fechaInicio = forms.DateField(label="Introduzca la fecha de inicio",initial=datetime.date.today)
     fechaFin = forms.DateField(label="Introduzca la fecha de fin",initial=datetime.date.today)
     CHOICES = (('TextBlob', 'TextBlob'),
                ('MeaningCloud', 'MeaningCloud'),)
-    maquinaAnalisis = forms.ChoiceField(label="¿Qué máquina de análisis usar?",choices=CHOICES, help_text="Utilice MeaningCloud solo para una recolección de tweets inferior a 10.000 debido a la restricción de la API")
+    maquinaAnalisis = forms.ChoiceField(label="¿Qué motor de análisis usar?",choices=CHOICES, help_text="Utilice MeaningCloud solo para una recolección de tuits inferior a 10.000 debido a la restricción de la API")
 
 
 ########################

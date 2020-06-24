@@ -28,7 +28,7 @@
                 <h1>¿Qué es un Tema?</h1>
             </div>
         </div>
-        <p class="text-justify" style="padding: 5rem 1.5rem;">Un Tema es una caracterización de la búsqueda de Tweets. Se puede crear un
+        <p class="text-justify" style="padding: 5rem 1.5rem;">Un Tema es una caracterización de la búsqueda de Tuits. Se puede crear un
         tema para conocer la opinión que se tiene sobre él, en el mundo de la red social Twitter. Cuando se desarrolla
         el tema, el usuario introduce el nombre del tema que va a crear y, a su vez, introduce una lista de palabras clave
         que indican los posibles nombres por los que se puede encontrar referenciado.</p>
@@ -44,12 +44,12 @@
             </div>
         </div>
         <p class="text-justify" style="padding: 5rem 1.5rem;">El objeto tweet de la herramienta contiene la información
-            que se recolecta de la red social Twitter a través del propio tweet. En la red social, el
+            que se recopila de la red social Twitter a través del propio tuit. En la red social, el
             objeto tiene mucha información que se desecha, como por ejemplo, información no interesante
             del usuario, foto de perfíl, descripción del mismo, y otra información esencial para el
             uso de esta herramienta, el texto, que describirá la opinión que se recoge de él, la
-            localización geográfica, si es un retweet o es favorito, es decir, que este tweet es una
-            referencia a otro tweet que se creó, el número de retweet y favoritos. Gracias a estos datos,
+            localización geográfica, si es un retuit o es favorito, es decir, que este tuit es una
+            referencia a otro tuit que se creó, el número de retuits y favoritos. Gracias a estos datos,
             la herramienta genera un objeto con las siguientes características:</p>
 
         <table class="table">
@@ -62,15 +62,15 @@
             <tbody>
             <tr>
                 <td>fecha_creado</td>
-                <td>Informa de la fecha en la que se creó el tweet.</td>
+                <td>Informa de la fecha en la que se creó el tuit.</td>
             </tr>
             <tr>
                 <td>id_twitter</td>
-                <td>Es el id único que tiene el tweet en la red social Twitter.</td>
+                <td>Es el id único que tiene el tuit en la red social Twitter.</td>
             </tr>
             <tr>
                 <td>texto</td>
-                <td>Texto publicado en el tweet.</td>
+                <td>Texto publicado en el tuit.</td>
             </tr>
             <tr>
                 <td>truncado</td>
@@ -86,39 +86,39 @@
             </tr>
             <tr>
                 <td>place</td>
-                <td>Indica si el tweet está asociado a un lugar en específico.</td>
+                <td>Indica si el tuit está asociado a un lugar en específico.</td>
             </tr>
             <tr>
                 <td>numero_ret</td>
-                <td>Cantidad de retweet que tiene el tweet.</td>
+                <td>Cantidad de retuit que tiene el tuit.</td>
             </tr>
             <tr>
                 <td>numero_fav</td>
-                <td>Cantidad de favoritos que tiene el tweet.</td>
+                <td>Cantidad de favoritos que tiene el tuit.</td>
             </tr>
             <tr>
                 <td>esFavorito</td>
-                <td>Indica si el tweet ha sido autenticado por el usuario.</td>
+                <td>Indica si el tuit ha sido autenticado por el usuario.</td>
             </tr>
             <tr>
                 <td>esRetweet</td>
-                <td>Indica si el tweet a sido un retweet de otro.</td>
+                <td>Indica si el tuit a sido un retuit de otro.</td>
             </tr>
             <tr>
                 <td>idioma</td>
-                <td>Indica el idioma al que pertenece el tweet.</td>
+                <td>Indica el idioma al que pertenece el tuit.</td>
             </tr>
             <tr>
                 <td>tema</td>
-                <td>Tema al que pertenece el tweet.</td>
+                <td>Tema al que pertenece el tuit.</td>
             </tr>
             <tr>
                 <td>categoría</td>
-                <td>Categoría al que pertenece el tweet.</td>
+                <td>Categoría al que pertenece el tuit.</td>
             </tr>
             <tr>
                 <td>polaridad</td>
-                <td>Hace referencia a la polaridad del tweet, Positiva, Negativa o Neutra</td>
+                <td>Hace referencia a la polaridad del tuit, Positiva, Negativa o Neutra</td>
             </tr>
             <tr>
                 <td>numero_Polaridad</td>
@@ -126,7 +126,7 @@
             </tr>
             <tr>
                 <td>busqueda</td>
-                <td>Indica la búsqueda realizada en la que se encontró el tweet, Actual o Histórica.</td>
+                <td>Indica la búsqueda realizada en la que se encontró el tuit, Actual o Histórica.</td>
             </tr>
             <tr>
                 <td>analisis</td>
@@ -134,7 +134,7 @@
             </tr>
             </tbody>
         </table>
-        <p class="text-justify" style="padding: 5rem 1.5rem;">Utilice el siguiente botón para exportar los tweets
+        <p class="text-justify" style="padding: 5rem 1.5rem;">Utilice el siguiente botón para exportar los tuits
         de la herramienta con la estructura anterior en archivo CSV.</p>
 
         <a href="{% url 'csv-all-view' %}" class="btn btn-outline-primary">exportar </a>

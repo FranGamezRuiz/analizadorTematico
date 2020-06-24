@@ -96,13 +96,13 @@
                 <p class="text-justify">Esta gráfica permite la visualización de la evolución de la opinión que ha tenido el
             tema {{ tema }} a lo largo del tiempo de búsqueda que se ha realizado, se observan dos
             líneas, una representando la búsqueda actual y otra la búsqueda histórica. Para realizar
-            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tweet
-            recolectado y se calcula una media aritmetica de los tweets que se publicaron el mismo día.
+            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tuit
+            recopilado y se calcula una media aritmetica de los tuits que se publicaron el mismo día.
             Así, se obtiene la evolución de la opinión. Esto sirve para conocer en que momento se aumentó
             o disminuyó la positividad o negatividad de las opiniones y así poder conocer a que se debe. Si
             en el tema {{ tema }} hubo una modificación de algo un día concreto, si la opinión positiva crece
             a partir de ese día, se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea,
-            si es al contrario y se obtiene mayor número de tweets de polaridad negativa, se conoce la
+            si es al contrario y se obtiene mayor número de tuits de polaridad negativa, se conoce la
                  consecuencia directa de ese descontento.</p>
                 <canvas class="my-4" id="myChart7" width="900" height="380"  style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
 
@@ -110,7 +110,7 @@
                 <div class="row">
                     <div class="col-lg-auto">
                         <div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);">
-                            <p>Tweets:</p>
+                            <p>Tuits:</p>
                             <p> {{ cantidadTotal }}</p>
                         </div>
                     </div>
@@ -122,10 +122,10 @@
                         </div>
                     </div>
                 </div>
-                <p class="text-justify">Obsérvese la grafica conseguida a través de la recolección de los tweets sobre
+                <p class="text-justify">Obsérvese la grafica conseguida a través de la recolección de los tuits sobre
             el tema {{ tema }}. Se observan una gráfica PIE, correspondiente a los datos que se han recolectado a
                     través del tipo de busqueda {{ tipo }}. Para represetar el porcentaje, se recoge el
-            total de tweets que representa el 100%, una vez hecho esto, se calcula el porcentaje
+            total de tuits que representa el 100%, una vez hecho esto, se calcula el porcentaje
             que representa a cada polaridad y así, tener una visión de cuál es la opinión que más
             destaca sobre el tema. Si el número de porcentaje de positivo es mayor que los otros dos,
                 se puede concluir que el tema {{ tema }} tiene una opinión general positiva</p>
@@ -143,8 +143,8 @@
             tema {{ tema }} a lo largo del tiempo de búsqueda que se ha realizado, se observan diferentes
             líneas, cada una representa una categoría diferente, se puede observar que cada una tiene un color diferente
                     y se puede ver cual es la que representa. Para realizar
-            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tweet
-            recolectado y se calcula una media aritmetica de los tweets que se publicaron el mismo día y a la categoría a la que pertenece.
+            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tuit
+            recopilado y se calcula una media aritmetica de los tuits que se publicaron el mismo día y a la categoría a la que pertenece.
             Así, se obtiene la evolución de la opinión. Esto sirve para conocer en que momento se aumentó
             o disminuyó la positividad o negatividad de las opiniones y así poder conocer a que se debe. Se puede
                 ver con mayor perspectiva si afecta directamente las opiniones entre las categorías que hay en el tema.</p>

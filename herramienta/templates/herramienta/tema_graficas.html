@@ -75,8 +75,8 @@
                 </div>
             <p class="text-justify">Obsérvese las graficas conseguidas a través de la recolección de los tweets sobre
             el tema {{ tema }} y la categoría {{ titulo }}. Se observan dos gráficas de forma de tarta, una correspondiente
-            a los datos que se recolectan usando la búsqueda actual usando la función streaming() de la
-            API de Twitter y la siguiente representa a los recolectados con la búsqueda histórica
+            a los datos que se recopila usando la búsqueda actual usando la función streaming() de la
+            API de Twitter y la siguiente representa a los recopilados con la búsqueda histórica
             con la función search(). Para represetar el porcentaje de de cada una de ellas, se recoge el
             total de tweets que representa el 100%, una vez hecho esto, se calcula el porcentaje
             que representa a cada polaridad y así, tener una visión de cuál es la opinión que más
@@ -94,27 +94,27 @@
              <p class="text-justify">Esta gráfica permite la visualización de la evolución de la opinión que ha tenido el
             tema {{ tema }} y la categoría {{ titulo }} a lo largo del tiempo de búsqueda que se ha realizado, se observan dos
             líneas, una representando la búsqueda actual y otra la búsqueda histórica. Para realizar
-            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tweet
+            esta gráfica, se ha conseguido gracias a que se obtiene la fecha en la que se publicó el tuit
             recolectado y se calcula una media aritmetica de los tweets que se publicaron el mismo día.
             Así, se obtiene la evolución de la opinión. Esto sirve para conocer en que momento se aumentó
             o disminuyó la positividad o negatividad de las opiniones y así poder conocer a que se debe. Si
             en el tema {{ tema }} hubo una modificación de algo un día concreto, si la opinión positiva crece
             a partir de ese día, se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea,
-            si es al contrario y se obtiene mayor número de tweets de polaridad negativa, se conoce la
+            si es al contrario y se obtiene mayor número de tuits de polaridad negativa, se conoce la
                  consecuencia directa de ese descontento.</p>
 
             <canvas class="my-4" id="myChart7" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
         {% else %}
             <div class="row">
-                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">Número de tweets: {{ nTweets }}</div></div>
+                <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">Número de tuits: {{ nTweets }}</div></div>
                 <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">
-                        Número de tweets analizados con TextBlob: {{ tweetsTextBlob }}</div></div>
+                        Número de tuits analizados con TextBlob: {{ tweetsTextBlob }}</div></div>
                 {% if tipo != 'Actual' %}
                 <div class="col"><div style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5); margin-top: 1.5rem ">
-                        Número de tweets analizados con MeaningCloud: {{ tweetsMeaning }}</div></div>
+                        Número de tuits analizados con MeaningCloud: {{ tweetsMeaning }}</div></div>
                 {% endif %}
             </div>
-                <h6 style="margin-top: 1.5rem">Tweets con TextBlob</h6>
+                <h6 style="margin-top: 1.5rem">Tuits con TextBlob</h6>
             {% if tweetsTextBlob == 0 %}
                 <img src="{{ STATIC_URL }}/static/images/buscar-dashboard.png" width="1000" height="500"  >
             {% else %}
@@ -122,7 +122,7 @@
 
                 <p class="text-justify">Muestra de una gráfica de tipo PIE en el que se representa el porcentaje de la polaridad
                 de la opinión sobre el tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
-                analizador TextBlob. Para ello se recoge el número total de tweets que representa el 100% y una vez realizado esto,
+                analizador TextBlob. Para ello se recoge el número total de tuits que representa el 100% y una vez realizado esto,
                 se calcula el porcentaje para la polaridad negativa, positiva y neutra. Se puede observar cuál de las polaridades
                 tiene mayor representación en el total y así conocer la opinión general que se tiene del tema.</p>
                     <canvas class="my-4" id="myChart" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
@@ -130,25 +130,25 @@
                         tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
                         analizador TextBlob a lo largo del tiempo de búsqueda que se ha realizado, se observan una
                         línea que es la que representa {{ titulo }}. Para realizar esta gráfica, se ha conseguido gracias a
-                        que se obtiene la fecha en la que se publicó el tweet recolectado y se calcula una media aritmetica
-                        de los tweets que se publicaron el mismo día. Así, se obtiene la evolución de la opinión.
+                        que se obtiene la fecha en la que se publicó el tuits recopilados y se calcula una media aritmetica
+                        de los tuits que se publicaron el mismo día. Así, se obtiene la evolución de la opinión.
                         Esto sirve para conocer en que momento se aumentó o disminuyó la positividad o negatividad
                         de las opiniones y así poder conocer a que se debe. Si en el tema {{ tema }} y la categoría {{ titulo }}
                         hubo una modificación de algo un día concreto, si la opinión positiva crece a partir de ese día,
                         se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea, si es al contrario
-                        y se obtiene mayor número de tweets de polaridad negativa, se conoce la consecuencia directa de ese descontento.</p>
+                        y se obtiene mayor número de tuits de polaridad negativa, se conoce la consecuencia directa de ese descontento.</p>
                     <canvas class="my-4" id="myChart2" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
                 </div>
             {% endif %}
             {% if tipo != 'Actual' %}
-                <h6 style="margin-top: 1.5rem">Tweets con MeaningCloud</h6>
+                <h6 style="margin-top: 1.5rem">Tuits con MeaningCloud</h6>
                 {% if tweetsMeaning == 0 %}
                     <img src="{{ STATIC_URL }}/static/images/buscar-dashboard.png" width="1000" height="500"  >
                 {% else %}
                     <div>
                         <p class="text-justify">Muestra de una gráfica de tipo PIE en el que se representa el porcentaje de la polaridad
                 de la opinión sobre el tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
-                analizador MeaningCloud. Para ello se recoge el número total de tweets que representa el 100% y una vez realizado esto,
+                analizador MeaningCloud. Para ello se recoge el número total de tuits que representa el 100% y una vez realizado esto,
                 se calcula el porcentaje para la polaridad negativa, positiva y neutra. Se puede observar cuál de las polaridades
                 tiene mayor representación en el total y así conocer la opinión general que se tiene del tema.</p>
                         <canvas class="my-4" id="myChart3" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
@@ -156,13 +156,13 @@
                         tema {{ tema }} y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y con el
                         analizador MeaninCloud a lo largo del tiempo de búsqueda que se ha realizado, se observan una
                         línea que es la que representa {{ titulo }}. Para realizar esta gráfica, se ha conseguido gracias a
-                        que se obtiene la fecha en la que se publicó el tweet recolectado y se calcula una media aritmetica
-                        de los tweets que se publicaron el mismo día. Así, se obtiene la evolución de la opinión.
+                        que se obtiene la fecha en la que se publicó el tuits recopilado y se calcula una media aritmetica
+                        de los tuits que se publicaron el mismo día. Así, se obtiene la evolución de la opinión.
                         Esto sirve para conocer en que momento se aumentó o disminuyó la positividad o negatividad
                         de las opiniones y así poder conocer a que se debe. Si en el tema {{ tema }} y la categoría {{ titulo }}
                         hubo una modificación de algo un día concreto, si la opinión positiva crece a partir de ese día,
                         se puede conocer que ese cambio ha sido bueno y se debe de seguir en esa línea, si es al contrario
-                        y se obtiene mayor número de tweets de polaridad negativa, se conoce la consecuencia directa de ese descontento.</p>
+                        y se obtiene mayor número de tuits de polaridad negativa, se conoce la consecuencia directa de ese descontento.</p>
                         <canvas class="my-4" id="myChart4" width="900" height="380" style="background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,.5);"></canvas>
                     </div>
                 {% endif %}
@@ -170,7 +170,7 @@
         {% endif %}
         {% if nTweets > 0 %}
         <p class="text-justify">Una imagen representando las palabras que más se utilizan para mostrar
-        la opinión en los tweets. Se recogen todos los tweets que se han obtenido sobre el tema {{ tema }}
+        la opinión en los tuits. Se recogen todos los tuits que se han obtenido sobre el tema {{ tema }}
         y la categoría {{ titulo }} con el tipo de búsqueda {{ tipo }} y se recogen sobre un texto completo, se eliminan
         las palabras que no tienen relevancia, como determinantes, preposiciones o palabras con una longitud
         menor de tres que no ofrecen caracterización relevante. Una vez obtenido las palabras importantes, se
