@@ -15,8 +15,10 @@ def historico(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, ma
 
     numTw = int(numTw)
     if numTw <= 1000:
+        print('Tarea cursor')
         cursorHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaInic, fechaFin)
     else:
+        print('Tarea search')
         searchHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC, numTw, maquina, fechaInic, fechaFin)
     print('Termina el proceso')
 

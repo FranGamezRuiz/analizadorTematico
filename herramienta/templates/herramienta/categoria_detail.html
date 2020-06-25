@@ -61,14 +61,14 @@
         </p>
         <h6>Histórica</h6>
         <p class="text-justify" style="padding: 0 1.5rem;">La búsqueda que se realiza en la parte histórica funciona con la función
-            de tweepy, search y cursor, dependiendo de la cantidad de tweets que se deseen recolectar usará una u otra. Si la cantidad
-            de tweets es inferior a 1000 usará la función cursor, en caso contrario, usará search. Para poder realizarla, es necesario
+            de tweepy, search y cursor, dependiendo de la cantidad de tweets que se deseen recopilar usará una u otra. Si la cantidad
+            de tuits es inferior a 1000 usará la función cursor, en caso contrario, usará search. Para poder realizarla, es necesario
             introducir dos fechas, una que indica la fecha de inicio que es la más lejana, esta no debe de ser más lejana que a siete días
             sobre la fecha actual, ya que, la API de Twitter no permite la recolección sobre fechas anteriores, y la fecha fin que es la más
-            cercana a la de hoy. También se ofrece la posibilidad de seleccionar la máquina de análisis que se puede utilizar, textblob o meaningCloud.
-            Se comprueba que la máquina de meaningCloud es más eficiente, debido a que su análisis es más exacto que la de textblob, el único
-            problema, es que la API que ofrece la empresa MeaningCloud, solo permite el análisis de 20.000 peticiones al mes y si se realizan
-            muchas búsquedas no se puede realizar más, en cambio, textblob no tiene limitaciones.
+            cercana a la de hoy. También se ofrece la posibilidad de seleccionar el motor de análisis que se puede utilizar, textblob o meaningCloud.
+            Se comprueba que el motor de meaningCloud es más eficiente, debido a que su análisis es más exacto que la de textblob debido a que
+            textblob usa una traducción en inglés, el único problema, es que la API que ofrece MeaningCloud, solo permite el análisis
+            de 20.000 peticiones al mes y si se realizan muchas búsquedas no se puede realizar más, en cambio, textblob no tiene limitaciones.
         </p>
         <h6>Actual</h6>
         <p class="text-justify" style="padding: 0 1.5rem;">La búsqueda que se realiza en la parte actual funciona con la función

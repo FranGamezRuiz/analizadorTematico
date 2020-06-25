@@ -177,22 +177,15 @@ def cursorHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
     numTw = int(numTw)
     contTweet = 0
     busqueda = numTw
-    sinceId = None
     max_id = -1
     while contTweet < busqueda:
         busqueda = busqueda - contTweet
         print(busqueda)
         try:
             if max_id <= 0:
-                if not sinceId:
-                    tweetemp = tweepy.Cursor(api.search, palabra, since=fechaInic, until=fechaFin, lang='es', tweet_mode='extended').items(busqueda)
-                else:
-                    tweetemp = tweepy.Cursor(api.search, palabra, since=fechaInic, until=fechaFin, since_id=sinceId, lang='es', tweet_mode='extended').items(busqueda)
+               tweetemp = tweepy.Cursor(api.search, palabra, since=fechaInic, until=fechaFin, lang='es', tweet_mode='extended').items(busqueda)
             else:
-                if not sinceId:
-                    tweetemp = tweepy.Cursor(api.search, palabra, since=fechaInic, until=fechaFin, max_id=str(max_id - 1), lang='es', tweet_mode='extended').items(busqueda)
-                else:
-                    tweetemp = tweepy.Cursor(api.search, palabra, since=fechaInic, until=fechaFin, max_id=str(max_id - 1), since_id=sinceId, lang='es', tweet_mode='extended').items(busqueda)
+                tweetemp = tweepy.Cursor(api.search, palabra, since=fechaInic, until=fechaFin, max_id=str(max_id - 1), lang='es', tweet_mode='extended').items(busqueda)
 
             if not tweetemp:
                 print('No encontrado')
@@ -242,21 +235,15 @@ def searchHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
     palabra.append(palabrasClave(palabrasClaveC))
     numTw = int(numTw)
     tweetsPorBusqueda = 100
-    sinceId = None
     max_id = -1
     contTweets = 0
     while contTweets < numTw:
         try:
             if max_id <= 0:
-                if not sinceId:
-                    tweetemp = api.search(q=palabra, since=fechaInic, until=fechaFin,count=tweetsPorBusqueda,tweet_mode='extended')
-                else:
-                    tweetemp = api.search(q=palabra, since=fechaInic, until=fechaFin,since_id=sinceId,count=tweetsPorBusqueda,tweet_mode='extended')
+
+                tweetemp = api.search(q=palabra, since=fechaInic, until=fechaFin,count=tweetsPorBusqueda,tweet_mode='extended')
             else:
-                if not sinceId:
-                    tweetemp = api.search(q=palabra, since=fechaInic, until=fechaFin,count=tweetsPorBusqueda, max_id=str(max_id - 1),tweet_mode='extended')
-                else:
-                    tweetemp = api.search(q=palabra, since=fechaInic, until=fechaFin, since_id=sinceId,count=tweetsPorBusqueda, max_id=str(max_id - 1),tweet_mode='extended')
+                tweetemp = api.search(q=palabra, since=fechaInic, until=fechaFin,count=tweetsPorBusqueda, max_id=str(max_id - 1),tweet_mode='extended')
 
             if not tweetemp:
                 #No encontrado
@@ -271,3 +258,5 @@ def searchHist(nombreTema, palabrasClaveT, nombreCate, palabrasClaveC , numTw, m
         except tweepy.TweepError as e:
             print(e.reason)
             time.sleep(60 * 15) #Para los limites de la API
+    print('Entre ', format(fechaInic), ' y ', format(fechaFin), ' se han encontrado ', format(contTweets), ' de ',
+          format(numTw))
